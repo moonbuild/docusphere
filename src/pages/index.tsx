@@ -41,13 +41,13 @@ export default function Home(): JSX.Element {
             title="App 1"
             description="Get started with our flagship application. Learn about core features, best practices, and advanced workflows."
             icon={<StarIcon />}
-            to="/docs/app1/intro"
+            to="/docs/app1"
           />
           <Card
             title="App 2"
             description="Explore our secondary application's documentation, including setup guides and integration tutorials."
             icon={<CheckIcon />}
-            to="/docs/app2/intro"
+            to="/docs/app2"
           />
           <Card
             title="Frontend Testing"
