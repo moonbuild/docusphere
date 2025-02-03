@@ -1,0 +1,42 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #4f46e5;
+  --ifm-color-primary-dark: #4338ca;
+  --ifm-color-primary-darker: #3730a3;
+  --ifm-color-primary-darkest: #312e81;
+  --ifm-color-primary-light: #6366f1;
+  --ifm-color-primary-lighter: #818cf8;
+  --ifm-color-primary-lightest: #a5b4fc;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  
+  --site-primary-color: var(--ifm-color-primary);
+  --site-secondary-color: #7c3aed;
+  --site-background-color: #f8fafc;
+  --site-card-bg: #ffffff;
+  --site-card-border: #e2e8f0;
+  --site-text-color: #0f172a;
+  --site-text-muted: #64748b;
+  --site-border-radius: 12px;
+  --site-box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --site-hover-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --site-hero-pattern-opacity: 1;
+}
+
+[data-theme='dark'] {
+  --site-background-color: #0f172a;
+  --site-card-bg: #1e293b;
+  --site-card-border: #334155;
+  --site-text-color: #f8fafc;
+  --site-text-muted: #cbd5e1;
+  --site-box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --site-hover-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+  --site-hero-pattern-opacity: 0.05;
+}
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap'); */
