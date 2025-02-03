@@ -1,3 +1,0 @@
----
-displayed-sidebar : app2
----
