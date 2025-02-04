@@ -1,7 +1,7 @@
 ---
-title: Pros and Cons
+title: Installation
 displayed-sidebar : backend
-sidebar_position: 7
+sidebar_position: 2
 
 ---
 | Pros | Cons |
