@@ -4,36 +4,37 @@ displayed-sidebar : backend
 sidebar_position: 4
 
 ---
-### Code Syntax: Testing FastAPI with Pytest
 
-This section demonstrates how to write tests for your FastAPI application using **Pytest** and the **TestClient** from FastAPI. This example focuses on testing the user registration endpoint (`/register/`) of a FastAPI application.
-
-Here is a detailed explanation of each part of the code:
-
-```python
-import pytest
-from fastapi.testclient import TestClient
-from main import app  # Import your FastAPI app
-
-client = TestClient(app)
-```
-
-#### 1. **Importing Required Modules**
-- `pytest`: The testing framework used to write and execute tests.
-- `TestClient`: A special FastAPI client used to simulate requests to the FastAPI app during tests. It provides a way to send HTTP requests to the FastAPI application without needing to run the server.
-- `app`: The FastAPI application instance that needs to be tested. This is typically the `app` object created in your FastAPI application file (in this case, it's assumed to be in `main.py`).
-
-#### 2. **Creating a TestClient Instance**
-```python
-client = TestClient(app)
-```
-- Here, an instance of `TestClient` is created using the FastAPI `app`. This allows the tests to make requests to the FastAPI application as if they were coming from a real client.
+Below is the  documentation for testing a FastAPI application with Pytest, incorporating the  examples as needed. The content has been expanded to include explanations for each test case and its relevance to testing database operations using SQLAlchemy's `AsyncSession`.
 
 ---
 
+## **Testing a FastAPI Application**
+
+FastAPI is a modern web framework for building APIs. Pytest can be used to test FastAPI applications without running the server. This section explains how to test API endpoints and database operations using Pytest and SQLAlchemy's `AsyncSession`.
+
+---
+
+### **Setting Up the Test Environment**
+To test a FastAPI application, use the `TestClient` from FastAPI to simulate HTTP requests. Additionally, for database-related tests, you can use an overridden `AsyncSession` to interact with the database in a controlled environment.
+
 ```python
-@pytest.mark.asyncio
-async def test_create_user():
+from fastapi.testclient import TestClient
+from main import app  # Assuming your FastAPI app is defined in main.py
+
+client = TestClient(app)
+```
+
+- **`TestClient`**: Simulates HTTP requests to the FastAPI application without requiring a running server.
+- **Database Testing**: Use an overridden `AsyncSession` to manage database transactions during tests.
+
+---
+
+### **Writing Tests for API Endpoints**
+Here’s an example of testing a `/register/` endpoint:
+
+```python
+def test_register_user():
     response = client.post("/register/", json={
         "username": "testuser",
         "password": "testpassword",
@@ -43,49 +44,186 @@ async def test_create_user():
     assert response.json() == {"message": "User created successfully"}
 ```
 
-#### 3. **Marking the Test as Async**
+- **Explanation**:
+  - The `client.post()` method simulates sending a POST request to the `/register/` endpoint.
+  - Assertions validate the HTTP status code (`200 OK`) and the JSON response.
+
+---
+
+### **Testing Asynchronous Routes**
+If your FastAPI app includes asynchronous routes, use `pytest-asyncio` to test them.
+
+```python
+import pytest
+from fastapi.testclient import TestClient
+from main import app
+
+client = TestClient(app)
+
+@pytest.mark.asyncio
+async def test_async_route():
+    response = client.get("/async-endpoint/")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Success"}
+```
+
+- **Explanation**:
+  - The `@pytest.mark.asyncio` decorator ensures that the test runs asynchronously.
+  - The `client.get()` method simulates sending a GET request to the `/async-endpoint/`.
+
+---
+
+### **Testing Database Operations with SQLAlchemy**
+For database-related tests, use SQLAlchemy's `AsyncSession` to interact with the database. Below are examples of CRUD (Create, Read, Update, Delete) operations and their corresponding tests.
+
+#### **1. Creating a Note**
+```python
+import pytest
+from sqlalchemy.ext.asyncio import AsyncSession
+from models.model import Note
+from dao.note_dao import NoteDAO
+
+@pytest.mark.asyncio
+async def test_create_note(override_get_db: AsyncSession):
+    """Test creating a new note"""
+    async with override_get_db as db:
+        note_dao = NoteDAO(db)
+        note = await note_dao.create_note(title="Test Title", body="Test Body", user_id=1)
+        assert note is not None
+        assert note.title == "Test Title"
+        assert note.body == "Test Body"
+        assert note.user_id == 1
+```
+
+- **Explanation**:
+  - The `override_get_db` fixture provides an `AsyncSession` instance for database interactions.
+  - The `create_note` method inserts a new record into the database.
+  - Assertions verify that the returned object matches the input data.
+
+---
+
+#### **2. Retrieving a Note by ID**
 ```python
 @pytest.mark.asyncio
+async def test_get_note_by_id(override_get_db: AsyncSession):
+    """Test retrieving a note by its ID"""
+    async with override_get_db as db:
+        note_dao = NoteDAO(db)
+        created_note = await note_dao.create_note(title="Test Note", body="Sample Content", user_id=1)
+        retrieved_note = await note_dao.get_note_by_id(created_note.note_id)
+        assert retrieved_note is not None
+        assert retrieved_note.title == "Test Note"
+        assert retrieved_note.body == "Sample Content"
 ```
-- The `@pytest.mark.asyncio` decorator is used to indicate that the test is asynchronous. This is required for tests that involve async code, such as when testing endpoints in FastAPI that use `async` functions.
-- Even though the `TestClient` doesn't need to be awaited for requests, the decorator ensures compatibility with the async testing framework in Pytest.
 
-#### 4. **Defining the Test Function**
-```python
-async def test_create_user():
-```
-- This is the test function. It is marked as asynchronous because the test needs to interact with the FastAPI application in a non-blocking way.
-
-#### 5. **Making the HTTP Request**
-```python
-response = client.post("/register/", json={
-    "username": "testuser",
-    "password": "testpassword",
-    "full_name": "Test User"
-})
-```
-- The `client.post()` method sends an HTTP POST request to the `/register/` endpoint of the FastAPI app. 
-- The `json` argument provides the request body as a JSON object, which includes the required parameters to register a new user: `username`, `password`, and `full_name`.
-- `client` can handle synchronous requests even though the FastAPI application may be asynchronous, making it ideal for integration testing.
-
-#### 6. **Assertions**
-```python
-assert response.status_code == 200
-assert response.json() == {"message": "User created successfully"}
-```
-- **`assert response.status_code == 200`**: This assertion checks that the response status code is `200`, which indicates that the request was successfully processed by the server.
-- **`assert response.json() == {"message": "User created successfully"}`**: This checks that the response JSON body contains the expected message, confirming that the user was successfully created.
+- **Explanation**:
+  - A note is created and then retrieved using its `note_id`.
+  - Assertions ensure that the retrieved note matches the original data.
 
 ---
 
-### Key Points:
-- **TestClient** allows simulating HTTP requests, making it an excellent tool for testing FastAPI applications.
-- **Pytest** provides an easy-to-use framework for writing and organizing tests, while **asyncio** support ensures compatibility with asynchronous FastAPI code.
-- The **`@pytest.mark.asyncio`** decorator ensures that the test function can handle asynchronous operations, even if the requests themselves are synchronous.
-- Assertions like **status_code** and **response.json()** are used to verify that the server behaves as expected and returns the correct data.
+#### **3. Retrieving All Notes for a User**
+```python
+@pytest.mark.asyncio
+async def test_get_notes_by_user(override_get_db: AsyncSession):
+    """Test retrieving all notes for a user"""
+    async with override_get_db as db:
+        note_dao = NoteDAO(db)
+        await note_dao.create_note(title="Note 1", body="Content 1", user_id=1)
+        await note_dao.create_note(title="Note 2", body="Content 2", user_id=1)
+        notes = await note_dao.get_notes_by_user(1)
+        assert len(notes) == 2
+        assert notes[0].title == "Note 1"
+        assert notes[1].title == "Note 2"
+```
+
+- **Explanation**:
+  - Multiple notes are created for the same user.
+  - The `get_notes_by_user` method retrieves all notes associated with the user.
+  - Assertions validate the number of notes and their content.
 
 ---
 
-### Conclusion
+#### **4. Updating a Note**
+```python
+@pytest.mark.asyncio
+async def test_update_note(override_get_db: AsyncSession):
+    """Test updating an existing note"""
+    async with override_get_db as db:
+        note_dao = NoteDAO(db)
+        note = await note_dao.create_note(title="Old Title", body="Old Body", user_id=1)
+        updated_note = await note_dao.update_note(note.note_id, title="New Title", body="New Body")
+        assert updated_note is not None
+        assert updated_note.title == "New Title"
+        assert updated_note.body == "New Body"
+```
 
-In this example, we've demonstrated how to test a FastAPI route using Pytest with the `TestClient`. This allows you to perform integration tests in your application by making HTTP requests and validating the responses. With the combination of Pytest's rich features and FastAPI's TestClient, testing your FastAPI application becomes straightforward and efficient.
+- **Explanation**:
+  - A note is created and then updated with new values.
+  - Assertions confirm that the update was successful.
+
+---
+
+#### **5. Updating a Non-Existent Note**
+```python
+@pytest.mark.asyncio
+async def test_update_non_existent_note(override_get_db: AsyncSession):
+    """Test updating a note that doesn't exist"""
+    async with override_get_db as db:
+        note_dao = NoteDAO(db)
+        updated_note = await note_dao.update_note(note_id=999, title="Updated Title", body="Updated Body")
+        assert updated_note is None
+```
+
+- **Explanation**:
+  - Attempting to update a non-existent note should return `None`.
+  - Assertions ensure that the function handles invalid inputs gracefully.
+
+---
+
+#### **6. Deleting a Note**
+```python
+@pytest.mark.asyncio
+async def test_delete_note(override_get_db: AsyncSession):
+    """Test deleting a note"""
+    async with override_get_db as db:
+        note_dao = NoteDAO(db)
+        note = await note_dao.create_note(title="Delete Me", body="Some Body", user_id=1)
+        deleted_note = await note_dao.delete_note(note.note_id)
+        assert deleted_note is not None
+        fetched_note = await note_dao.get_note_by_id(note.note_id)
+        assert fetched_note is None
+```
+
+- **Explanation**:
+  - A note is created and then deleted.
+  - Assertions verify that the note no longer exists in the database.
+
+---
+
+#### **7. Deleting a Non-Existent Note**
+```python
+@pytest.mark.asyncio
+async def test_delete_non_existent_note(override_get_db: AsyncSession):
+    """Test deleting a note that doesn't exist"""
+    async with override_get_db as db:
+        note_dao = NoteDAO(db)
+        deleted_note = await note_dao.delete_note(note_id=999)
+        assert deleted_note is None
+```
+
+- **Explanation**:
+  - Attempting to delete a non-existent note should return `None`.
+  - Assertions ensure that the function handles invalid inputs gracefully.
+
+---
+
+### **Key Points**
+1. **No Running Server**: The `TestClient` interacts directly with the FastAPI app, eliminating the need for a running server.
+2. **Asynchronous Support**: Use `pytest-asyncio` for testing async routes and database operations.
+3. **Assertions**: Validate status codes, JSON responses, and database interactions to ensure correctness.
+4. **Database Testing**: Use an overridden `AsyncSession` to manage database transactions during tests, ensuring isolation and repeatability.
+
+---
+
+This enhanced documentation provides a comprehensive guide to testing FastAPI applications, including both API endpoints and database operations. Each test case is accompanied by an explanation to help users understand its purpose and implementation. Let me know if you'd like further refinements!
