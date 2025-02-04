@@ -1,288 +1,266 @@
 ---
-title: Code Syntax
-displayed-sidebar : backend
+
+title: Code Syntax 
+displayed-sidebar: backend
 sidebar_position: 3
-
----
-# HTTPX: Detailed Syntax Guide
-
-**HTTPX** is a modern HTTP client for Python that supports both synchronous and asynchronous workflows. Below is a detailed guide to its syntax, covering common use cases and advanced features.
-
 ---
 
-## 1. **Basic Requests**
+# **HTTPX Syntax Documentation: Making HTTP Requests in Python**
 
-### Synchronous Requests
-HTTPX provides a simple interface for making synchronous HTTP requests. The syntax closely resembles the `requests` library, making it easy to adopt.
+**HTTPX** is a powerful and modern HTTP client for Python, offering both synchronous and asynchronous capabilities for making HTTP requests. Whether you're making a quick one-off request or handling multiple requests with shared configurations, HTTPX provides the flexibility you need. This documentation covers the two primary ways to make HTTP requests in HTTPX—using **top-level functions** and **client instances**—and explains their syntax, use cases, and performance considerations.
+
+---
+
+## **1. Making HTTP Requests**
+
+For simple, isolated requests, HTTPX allows you to use **top-level functions** like `httpx.get()`, `httpx.post()`, and others. This approach is ideal for quick, one-off requests when performance optimizations like connection reuse are not necessary.
+
+### **Synchronous Requests**
+
+In the synchronous mode, HTTPX blocks the program’s execution until the request is completed. Use this approach when you need straightforward, blocking HTTP requests.
+
+#### **Example:**
 
 ```python
 import httpx
 
-# GET Request
-response = httpx.get("https://api.example.com/data")
-print(response.status_code)  # e.g., 200
-print(response.text)         # Response body as text
-print(response.json())       # Parse response body as JSON
+# Sending a GET Request
+response = httpx.get("https://jsonplaceholder.typicode.com/posts/1")
+assert response.status_code == 200
+print(response.json())
 
-# POST Request
-response = httpx.post("https://api.example.com/data", json={"key": "value"})
-print(response.status_code)
+# Sending a POST Request
+response = httpx.post(
+    "https://jsonplaceholder.typicode.com/posts",
+    json={"title": "foo", "body": "bar", "userId": 1}
+)
+assert response.status_code == 201
 print(response.json())
 ```
 
-### Asynchronous Requests
-For asynchronous workflows, HTTPX uses `AsyncClient`. Use `async`/`await` to handle non-blocking I/O operations.
+### **Asynchronous Requests**
+
+In the asynchronous mode, HTTPX allows non-blocking requests by using `await`, which makes it ideal for handling I/O-bound tasks like web scraping or interacting with APIs in parallel.
+
+#### **Example:**
 
 ```python
 import asyncio
 import httpx
 
 async def fetch_data():
+    # GET Request
+    response = await httpx.get("https://jsonplaceholder.typicode.com/posts/1")
+    assert response.status_code == 200
+    print(response.json())
+
+    # POST Request
+    response = await httpx.post(
+        "https://jsonplaceholder.typicode.com/posts",
+        json={"title": "foo", "body": "bar", "userId": 1}
+    )
+    assert response.status_code == 201
+    print(response.json())
+
+# Run the async function
+asyncio.run(fetch_data())
+```
+
+**Key Notes**:
+- `httpx.get()` and `httpx.post()` are used for sending HTTP requests.
+- **Synchronous requests** block the execution until a response is received.
+- **Asynchronous requests** allow concurrent requests without blocking the program.
+
+---
+
+## **2. Making HTTP Requests With a Client**
+
+### **Understanding HTTPX Clients for Request Handling**
+
+In scenarios where you need to perform multiple requests, manage persistent connections, or configure shared settings, using an `httpx.Client` or `httpx.AsyncClient` is highly recommended. Clients are designed for efficiency and flexibility, making them an essential tool for applications requiring frequent communication with the same server.
+
+#### **Why Use an HTTPX Client?**
+
+When you use the basic HTTPX functions (like `httpx.get()` or `httpx.post()`), a new connection is established for each request. This process quickly becomes inefficient when multiple requests are made to the same host, leading to unnecessary resource usage.
+
+A Client instance, however, uses connection pooling, meaning that it reuses the same TCP connection for multiple requests to the same server. 
+
+By adopting `httpx.Client` or `httpx.AsyncClient`, you can build faster, more efficient, and more scalable applications. This makes them indispensable for scenarios that demand optimized communication with remote services. 
+ 
+### **Synchronous Client**
+
+The `httpx.Client` class is used for synchronous requests. It manages connection pooling and other settings like headers and cookies.
+
+#### **Example:**
+
+```python
+import httpx
+
+# Using a synchronous client
+with httpx.Client() as client:
+    # Sending a GET Request
+    response = client.get("https://jsonplaceholder.typicode.com/posts/1")
+    assert response.status_code == 200
+    print(response.json())
+
+    # Sending a POST Request
+    response = client.post(
+        "https://jsonplaceholder.typicode.com/posts",
+        json={"title": "foo", "body": "bar", "userId": 1}
+    )
+    assert response.status_code == 201
+    print(response.json())
+```
+
+### **Asynchronous Client**
+
+The `httpx.AsyncClient` class is designed for asynchronous HTTP requests, allowing non-blocking operations. It’s particularly useful in high-performance, I/O-bound applications.
+
+#### **Example:**
+
+```python
+import asyncio
+import httpx
+
+# Using an asynchronous client
+async def fetch_data():
     async with httpx.AsyncClient() as client:
-        # GET Request
-        response = await client.get("https://api.example.com/data")
-        print(response.status_code)
+        # Sending a GET Request
+        response = await client.get("https://jsonplaceholder.typicode.com/posts/1")
+        assert response.status_code == 200
         print(response.json())
 
-        # POST Request
-        response = await client.post("https://api.example.com/data", json={"key": "value"})
-        print(response.status_code)
+        # Sending a POST Request
+        response = await client.post(
+            "https://jsonplaceholder.typicode.com/posts",
+            json={"title": "foo", "body": "bar", "userId": 1}
+        )
+        assert response.status_code == 201
         print(response.json())
 
 # Run the async function
 asyncio.run(fetch_data())
 ```
 
----
-
-## 2. **Session Management**
-
-HTTPX allows you to reuse configurations (e.g., base URL, headers, authentication) across multiple requests using a session.
-
-### Synchronous Session
-Use `httpx.Client` to create a session.
-
-```python
-with httpx.Client(base_url="https://api.example.com", headers={"Authorization": "Bearer token"}) as client:
-    # GET Request
-    response = client.get("/endpoint1")
-    print(response.json())
-
-    # POST Request
-    response = client.post("/endpoint2", json={"key": "value"})
-    print(response.json())
-```
-
-### Asynchronous Session
-Use `httpx.AsyncClient` for asynchronous sessions.
-
-```python
-async def use_session():
-    async with httpx.AsyncClient(base_url="https://api.example.com", headers={"Authorization": "Bearer token"}) as client:
-        # GET Request
-        response = await client.get("/endpoint1")
-        print(response.json())
-
-        # POST Request
-        response = await client.post("/endpoint2", json={"key": "value"})
-        print(response.json())
-
-asyncio.run(use_session())
-```
+**Key Notes**:
+- **Client management** allows for connection reuse, reducing overhead.
+- **Persistent Connections** help improve performance for multiple requests to the same server.
+- **Shared Configuration**: Clients allow the sharing of settings like headers, cookies, and authentication across multiple requests.
 
 ---
 
-## 3. **Advanced Request Options**
+## **3. Key Differences: Top-Level Functions vs. Client Instances**
 
-### Query Parameters
-Pass query parameters using the `params` argument.
+Here’s a quick comparison of the two approaches:
 
-```python
-response = httpx.get("https://api.example.com/search", params={"q": "python", "page": 2})
-print(response.url)  # https://api.example.com/search?q=python&page=2
-```
-
-### Custom Headers
-Set custom headers using the `headers` argument.
-
-```python
-headers = {"User-Agent": "MyApp/1.0", "Authorization": "Bearer token"}
-response = httpx.get("https://api.example.com/data", headers=headers)
-print(response.text)
-```
-
-### File Uploads
-Upload files using the `files` argument.
-
-```python
-files = {"file": ("example.txt", open("example.txt", "rb"), "text/plain")}
-response = httpx.post("https://api.example.com/upload", files=files)
-print(response.json())
-```
-
-### Timeout Configuration
-Set a timeout for requests to avoid hanging indefinitely.
-
-```python
-try:
-    response = httpx.get("https://api.example.com/data", timeout=5.0)  # Timeout after 5 seconds
-    print(response.text)
-except httpx.TimeoutException:
-    print("Request timed out")
-```
+| Feature                    | Without a Client                          | With a Client                                |
+|----------------------------|-------------------------------------------|----------------------------------------------|
+| **Connection Management**  | Automatically managed per request         | Persistent connection pool for efficiency    |
+| **Shared Configuration**   | Limited (independent per request)         | Shared headers, cookies, auth, etc.          |
+| **Use Case**               | Simple, one-off requests                  | Multiple requests with shared configurations |
+| **Performance**            | Suitable for fewer requests               | Faster for bulk requests due to connection reuse |
 
 ---
 
-## 4. **Streaming Responses**
+## **4. Common Use Cases for Using a Client**
 
-For large responses, use streaming to process data incrementally.
+Using `httpx.Client` or `httpx.AsyncClient` becomes especially beneficial in the following situations:
 
-### Synchronous Streaming
-```python
-with httpx.stream("GET", "https://api.example.com/large-file") as response:
-    for chunk in response.iter_bytes():
-        process_chunk(chunk)
-```
+### **a. Managing Shared Configurations**
 
-### Asynchronous Streaming
-```python
-async def stream_data():
-    async with httpx.AsyncClient() as client:
-        async with client.stream("GET", "https://api.example.com/large-file") as response:
-            async for chunk in response.aiter_bytes():
-                process_chunk(chunk)
+When you need consistent headers, cookies, or authentication settings across multiple requests.
 
-asyncio.run(stream_data())
-```
-
----
-
-## 5. **Error Handling**
-
-HTTPX raises exceptions for HTTP errors and network issues. Use `try`/`except` blocks to handle them gracefully.
+#### **Example:**
 
 ```python
-try:
-    response = httpx.get("https://api.example.com/data")
-    response.raise_for_status()  # Raises an exception for 4xx/5xx status codes
-    print(response.json())
-except httpx.HTTPStatusError as e:
-    print(f"HTTP error occurred: {e.response.status_code}")
-except httpx.RequestError as e:
-    print(f"Network error occurred: {e}")
-```
-
----
-
-## 6. **Mocking with Respx**
-
-To mock API responses during testing, use the `respx` library.
-
-```python
-import respx
 import httpx
 
-@respx.mock
-def test_mocked_api():
-    # Mock a GET request
-    respx.get("https://api.example.com/data").mock(return_value=httpx.Response(200, json={"key": "value"}))
-
-    # Make the request
-    response = httpx.get("https://api.example.com/data")
+# Setting headers globally
+headers = {"Authorization": "Bearer YOUR_TOKEN"}
+with httpx.Client(headers=headers) as client:
+    response = client.get("https://api.example.com/user")
     assert response.status_code == 200
-    assert response.json() == {"key": "value"}
+    print(response.json())
 ```
 
----
+### **b. Reusing Connections for Performance**
 
-## 7. **Authentication**
+If you are making several requests to the same server, reusing the connection pool improves speed and reduces resource consumption.
 
-HTTPX supports various authentication mechanisms.
-
-### Basic Authentication
-```python
-auth = httpx.BasicAuth(username="user", password="pass")
-response = httpx.get("https://api.example.com/data", auth=auth)
-print(response.text)
-```
-
-### Bearer Token Authentication
-```python
-headers = {"Authorization": "Bearer token"}
-response = httpx.get("https://api.example.com/data", headers=headers)
-print(response.text)
-```
-
-### Custom Authentication
-Implement custom authentication by subclassing `httpx.Auth`.
+#### **Example:**
 
 ```python
-class CustomAuth(httpx.Auth):
-    def __init__(self, token):
-        self.token = token
-
-    def auth_flow(self, request):
-        request.headers["Authorization"] = f"Bearer {self.token}"
-        yield request
-
-response = httpx.get("https://api.example.com/data", auth=CustomAuth("my-token"))
-print(response.text)
-```
-
----
-
-## 8. **Timeouts and Retries**
-
-### Configure Timeouts
-Set timeouts globally or per request.
-
-```python
-# Global timeout
-client = httpx.Client(timeout=10.0)
-
-# Per-request timeout
-response = httpx.get("https://api.example.com/data", timeout=5.0)
-```
-
-### Implement Retries
-Use libraries like `tenacity` for retry logic.
-
-```python
-from tenacity import retry, stop_after_attempt, wait_fixed
 import httpx
 
-@retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
-def fetch_with_retries():
-    response = httpx.get("https://api.example.com/data")
-    response.raise_for_status()
-    return response.json()
-
-data = fetch_with_retries()
-print(data)
+with httpx.Client() as client:
+    for i in range(5):
+        response = client.get(f"https://jsonplaceholder.typicode.com/posts/{i + 1}")
+        print(response.json())
 ```
 
----
+### **c. Handling Authentication**
 
-## 9. **Custom Transports**
+For authenticated API requests, using a client with built-in support for authentication schemes (like Basic Auth or OAuth2) simplifies repeated authentication handling.
 
-For advanced use cases, customize the transport layer.
+#### **Example:**
 
 ```python
-from httpx import AsyncClient, ASGITransport
-from myapp.asgi import app  # Your ASGI application
+import httpx
 
-async def test_asgi_app():
-    async with AsyncClient(transport=ASGITransport(app=app)) as client:
-        response = await client.get("http://testserver/")
-        print(response.text)
+# Using Basic Authentication
+auth = ("username", "password")
+with httpx.Client(auth=auth) as client:
+    response = client.get("https://api.example.com/protected-resource")
+    assert response.status_code == 200
+    print(response.json())
+```
 
-asyncio.run(test_asgi_app())
+### **d. Streaming Large Files**
+
+For efficient downloading or uploading of large files, using a client to stream data can help manage memory usage and reduce overhead.
+
+#### **Example:**
+
+```python
+import httpx
+
+# Downloading a large file in chunks
+with httpx.Client() as client:
+    with client.stream("GET", "https://example.com/large-file") as response:
+        with open("large-file", "wb") as file:
+            for chunk in response.iter_bytes():
+                file.write(chunk)
+```
+
+### **e. Testing APIs with Consistent Configurations**
+
+When interacting with an API that requires multiple requests, using a client simplifies management of base URLs, headers, and other configurations.
+
+#### **Example:**
+
+```python
+import httpx
+
+with httpx.Client(base_url="https://api.example.com") as client:
+    # First Request
+    response = client.get("/user")
+    assert response.status_code == 200
+    print(response.json())
+
+    # Second Request
+    response = client.post("/data", json={"key": "value"})
+    assert response.status_code == 201
+    print(response.json())
 ```
 
 ---
 
-## Conclusion
+## **5. Conclusion**
 
-This guide covers the essential syntax and features of **HTTPX**, from basic requests to advanced configurations like streaming, mocking, and custom transports. With its support for both synchronous and asynchronous workflows, HTTPX is a versatile tool for interacting with HTTP services in Python.
+Whether you are making a one-off request or dealing with a complex workflow that requires persistent connections, HTTPX provides an efficient and flexible solution for your HTTP requests in Python. 
 
-For more details, refer to the official [HTTPX documentation](https://www.python-httpx.org/).
+- **For simple use cases** (like a quick GET or POST request), using **top-level functions** (`httpx.get()`, `httpx.post()`) is perfectly adequate.
+- **For more advanced needs**, such as handling multiple requests, shared configurations, or optimizing for performance with connection pooling, using an **HTTPX client** (`httpx.Client` or `httpx.AsyncClient`) is recommended.
+
+
+---
