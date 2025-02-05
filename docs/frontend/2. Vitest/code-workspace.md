@@ -1,0 +1,123 @@
+---
+title: Code Workspace
+description: "A guide to testing the NotesCardView component using Vitest and @testing-library/react."
+displayed-sidebar : frontend
+sidebar_position: 4
+
+---
+
+## Overview
+
+This document provides an in-depth explanation of test cases written for the `NotesCardView` component using **Vitest** and **@testing-library/react**. It covers rendering verification, button interactions, and mutation handling.
+:::info
+
+Know more about [React Testing Library](/docs/frontend/React-Testing-Library/general-overview.md).
+
+:::
+
+For more test cases and implementation details, check out the complete repository:
+
+[![GitHub](https://img.shields.io/badge/View%20on-GitHub-blue?logo=github)](https://github.com/tanishq-cloud/Notty)
+
+---
+
+## Test Cases
+
+### 1. Rendering Notes in Card View
+
+```tsx
+it("renders notes in card view", async () => {
+  render(<NotesCardView notes={mockUseNotes.notes} onView={vi.fn()} onEdit={vi.fn()} />);
+  expect(screen.getByText("Note: Test Note")).toBeInTheDocument();
+  expect(screen.getByText("Note: Another Test Note")).toBeInTheDocument();
+});
+```
+
+✅ **Ensures that notes are correctly displayed in the component.**
+
+---
+
+### 2. Clicking on View Button Triggers `onView` Callback
+
+```tsx
+it("clicking on view button triggers onView callback", async () => {
+  const onViewMock = vi.fn();
+  render(<NotesCardView notes={mockUseNotes.notes} onView={onViewMock} onEdit={vi.fn()} />);
+
+  const viewButtons = screen.getAllByTestId("view-button");
+  await userEvent.click(viewButtons[0]);
+
+  await waitFor(() => {
+    expect(onViewMock).toHaveBeenCalledWith(mockUseNotes.notes[0]);
+  });
+});
+```
+
+✅ **Verifies that the correct note is passed to the `onView` callback when clicked.**
+
+---
+
+### 3. Clicking on Edit Button Triggers `onEdit` Callback
+
+```tsx
+it("clicking on edit button triggers onEdit callback", async () => {
+  const onEditMock = vi.fn();
+  render(<NotesCardView notes={mockUseNotes.notes} onView={vi.fn()} onEdit={onEditMock} />);
+
+  const editButtons = screen.getAllByRole("button", { name: /edit/i });
+  await userEvent.click(editButtons[0]);
+
+  await waitFor(() => {
+    expect(onEditMock).toHaveBeenCalledWith(mockUseNotes.notes[0]);
+  });
+});
+```
+
+✅ **Confirms that the `onEdit` callback receives the correct note when clicked.**
+
+---
+
+### 4. Clicking on Delete Button Opens Confirmation Dialog
+
+```tsx
+it("clicking on delete button opens the delete confirmation dialog", async () => {
+  render(<NotesCardView notes={mockUseNotes.notes} onView={vi.fn()} onEdit={vi.fn()} />);
+
+  const deleteButtons = screen.getAllByTestId("delete-button");
+  await userEvent.click(deleteButtons[0]);
+
+  expect(screen.getByText(/Are you sure\?/)).toBeInTheDocument();
+});
+```
+
+✅ **Ensures that a confirmation dialog appears when the delete button is clicked.**
+
+---
+
+### 5. Confirming Delete Triggers the Delete Mutation
+
+```tsx
+it("confirming delete triggers the delete mutation", async () => {
+  render(<NotesCardView notes={mockUseNotes.notes} onView={vi.fn()} onEdit={vi.fn()} />);
+
+  const deleteButtons = screen.getAllByTestId("delete-button");
+  await userEvent.click(deleteButtons[0]);
+  
+  await userEvent.click(screen.getByRole("button", { name: /Delete/i }));
+
+  await waitFor(() => {
+    expect(mockUseNotes.deleteMutation.mutate).toHaveBeenCalledWith(mockUseNotes.notes[0].note_id);
+  });
+});
+```
+
+✅ **Verifies that the correct note ID is passed to the delete mutation.**
+
+---
+
+## Conclusion
+
+These test cases ensure that `NotesCardView` functions as expected. They verify rendering, interactions, and delete confirmation logic, improving the reliability of the component.
+
+📌 **For additional test cases and updates, visit the [GitHub repository](https://github.com/tanishq-cloud/Notty).**
+

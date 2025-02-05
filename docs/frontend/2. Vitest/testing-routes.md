@@ -1,0 +1,219 @@
+---
+title: Testing Tanstack Router
+description: A detailed breakdown of the test suite for login functionality using Vitest and React Testing Library.
+displayed-sidebar : frontend
+sidebar_position: 6
+---
+
+# Login Functionality Test Suite
+
+This documentation outlines the test suite for the login functionality. The tests are implemented using **Vitest** and **@testing-library/react**, covering different scenarios such as invalid login attempts, successful logins, validation errors, and navigation.
+
+:::info
+
+Know more about [React Testing Library](/docs/frontend/React-Testing-Library/general-overview.md).
+
+:::
+
+For more test cases and implementation details, check out the complete repository:
+
+[![GitHub](https://img.shields.io/badge/View%20on-GitHub-blue?logo=github)](https://github.com/tanishq-cloud/Notty)
+
+
+## Test Setup
+
+To ensure a stable and consistent testing environment, we use a custom `renderRoute` function. This function sets up routing and query management, allowing our test components to operate within the expected application context.
+
+### Render Route Utility
+
+```tsx title="src/test/router-test-wrapper.tsx"
+// Import the generated route tree
+import { routeTree } from "../routeTree.gen";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { RouterProvider, createRouter, createMemoryHistory } from "@tanstack/react-router";
+import { render } from "@testing-library/react";
+
+export function renderRoute(route: string) {
+  const testQueryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+
+  const memoryHistory = createMemoryHistory({
+    initialEntries: [route],
+  });
+
+  const router = createRouter({
+    routeTree,
+    defaultNotFoundComponent: () => <div>Not found</div>,
+    context: {
+      queryClient: testQueryClient,
+    },
+    defaultPreload: "intent",
+    defaultPreloadStaleTime: 0,
+    history: memoryHistory,
+  });
+
+  const { rerender, ...result } = render(
+    <QueryClientProvider client={testQueryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
+
+  return {
+    ...result,
+    rerender: () =>
+      rerender(
+        <QueryClientProvider client={testQueryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      ),
+  };
+}
+```
+
+### Setup and Teardown
+
+Each test is set up with the following `beforeEach` hook to ensure isolation and prevent cross-test contamination:
+
+```tsx
+beforeEach(() => {
+  vi.restoreAllMocks();
+  localStorage.clear();
+  sessionStorage.clear();
+});
+```
+
+This ensures that:
+- All mocks are restored.
+- `localStorage` and `sessionStorage` are cleared before each test.
+
+## Test Cases
+
+### 1. Invalid Login Attempt
+
+```tsx
+it("shows error message for invalid login", async () => {
+  vi.spyOn(authService, "login").mockRejectedValue(new Error("Invalid username or password"));
+
+  renderRoute("/login");
+
+  await screen.findByRole("heading", { name: /sign in to your account/i });
+  
+  const usernameInput = await screen.findByPlaceholderText(/Username/i);
+  const passwordInput = await screen.findByPlaceholderText(/Password/i);
+  const signInButton = screen.getByRole("button", { name: /sign in/i });
+
+  await userEvent.type(usernameInput, "wronguser");
+  await userEvent.type(passwordInput, "wrongpass");
+  await userEvent.click(signInButton);
+
+  await waitFor(() => {
+    expect(screen.getByText(/Invalid username or password/i)).toBeInTheDocument();
+  });
+});
+```
+
+**Purpose:** Ensures that an error message is displayed for incorrect login credentials.
+
+---
+
+### 2. Successful Login and Redirection
+
+```tsx
+it("logs in successfully and redirects to notes list", async () => {
+  vi.spyOn(authService, "login").mockResolvedValue({
+    access_token: "mock-token",
+    user_id: 1,
+    full_name: "mock-name",
+    refresh_token: "mock-refresh",
+  });
+
+  renderRoute("/login");
+
+  await screen.findByRole("heading", { name: /sign in to your account/i });
+
+  const usernameInput = await screen.findByPlaceholderText(/Username/i);
+  const passwordInput = await screen.findByPlaceholderText(/Password/i);
+  const signInButton = screen.getByRole("button", { name: /sign in/i });
+
+  await userEvent.type(usernameInput, "testuser");
+  await userEvent.type(passwordInput, "password123");
+  await userEvent.click(signInButton);
+
+  await waitFor(() => {
+    expect(window.location.pathname).toBe("/");
+  });
+});
+```
+
+**Purpose:** Verifies successful login and redirection to the notes list.
+
+---
+
+### 3. Validation Errors for Empty Fields
+
+```tsx
+it("shows validation errors when fields are empty", async () => {
+  renderRoute("/login");
+
+  await screen.findByRole("heading", { name: /sign in to your account/i });
+
+  const signInButton = screen.getByRole("button", { name: /sign in/i });
+  await userEvent.click(signInButton);
+
+  await waitFor(() => {
+    expect(screen.getByPlaceholderText(/Username/i)).toHaveAttribute("required");
+    expect(screen.getByPlaceholderText(/Password/i)).toHaveAttribute("required");
+  });
+});
+```
+
+**Purpose:** Ensures validation errors appear when required fields are empty.
+
+---
+
+### 4. Password Input Type
+
+```tsx
+it("password input should be of type password", async () => {
+  renderRoute("/login");
+
+  const passwordInput = await screen.findByPlaceholderText(/Password/i);
+  expect(passwordInput).toHaveAttribute("type", "password");
+});
+```
+
+**Purpose:** Confirms that the password field is properly secured.
+
+---
+
+### 5. Navigation to Register Page
+
+```tsx
+it("clicking 'Sign Up' navigates to the register page", async () => {
+  const mockNavigate = vi.fn();
+  vi.mocked(useNavigate).mockReturnValue(mockNavigate);
+
+  renderRoute("/login");
+
+  const signUpButton = await screen.findByRole("button", { name: /sign up/i });
+  await userEvent.click(signUpButton);
+
+  await waitFor(() => {
+    expect(mockNavigate).toHaveBeenCalledWith({ to: "/register" });
+  });
+});
+```
+
+**Purpose:** Ensures the navigation to the registration page functions correctly.
+
+---
+
+### 📌 GitHub Repository
+
+For more test cases and the complete implementation, visit the [GitHub repository](https://github.com/tanishq-cloud/Notty). 
+

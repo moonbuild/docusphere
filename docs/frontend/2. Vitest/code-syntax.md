@@ -1,0 +1,185 @@
+---
+title: Code Syntax
+displayed-sidebar : frontend
+sidebar_position: 3
+slug: /frontend/vitest/code-syntax
+authors: [tanishq]
+
+---
+# Writing Test Cases in Vitest
+
+---
+
+## Test Suites with `describe`
+
+The `describe` function is used to group related test cases into a test suite. This helps in organizing your tests logically and makes them easier to maintain.
+
+```javascript
+import { describe, it, expect } from 'vitest';
+
+describe('Math Operations', () => {
+  it('adds 1 + 1 to equal 2', () => {
+    expect(1 + 1).toBe(2);
+  });
+
+  it('subtracts 2 - 1 to equal 1', () => {
+    expect(2 - 1).toBe(1);
+  });
+});
+```
+
+---
+
+## Test Cases with `it`
+
+The `it` function defines individual test cases. Each test case should focus on testing a single unit of functionality.
+
+```javascript
+it('multiplies 2 * 3 to equal 6', () => {
+  expect(2 * 3).toBe(6);
+});
+```
+
+---
+
+## Assertions with `expect`
+
+The `expect` function is used to make assertions about the output of your code. Vitest provides a variety of matchers to check different conditions.
+
+```javascript
+it('checks if value is truthy', () => {
+  expect(true).toBeTruthy();
+});
+
+it('checks if value is falsy', () => {
+  expect(false).toBeFalsy();
+});
+
+it('checks if arrays are equal', () => {
+  expect([1, 2, 3]).toEqual([1, 2, 3]);
+});
+```
+
+:::tip
+
+For more matchers [check this](./expect-matcher.md). 
+
+:::
+---
+
+## Mocking Functions
+
+Vitest allows you to mock functions using `vi.fn()`. This is particularly useful for testing functions that depend on external logic.
+
+```javascript
+import { vi } from 'vitest';
+
+const mockFunction = vi.fn();
+
+mockFunction(1, 2, 3);
+
+expect(mockFunction).toHaveBeenCalledWith(1, 2, 3);
+```
+
+---
+
+## Mocking Modules
+
+You can mock entire modules using `vi.mock()`. This is helpful when you want to simulate the behavior of external dependencies in your tests.
+
+```javascript
+import { vi } from 'vitest';
+import axios from 'axios';
+
+vi.mock('axios');
+
+axios.get.mockResolvedValue({ data: 'mocked data' });
+
+it('fetches data from an API', async () => {
+  const response = await axios.get('/api/data');
+  expect(response.data).toBe('mocked data');
+});
+```
+
+---
+
+## Mocking Custom Hooks
+
+To mock a custom hook, you can use `vi.mock()` to mock the module where the hook is defined. This is especially useful when testing React components.
+
+```javascript
+import { vi } from 'vitest';
+import { renderHook } from '@testing-library/react-hooks';
+import useCustomHook from './useCustomHook';
+
+vi.mock('./useCustomHook');
+
+useCustomHook.mockReturnValue('mocked value');
+
+it('uses a custom hook', () => {
+  const { result } = renderHook(() => useCustomHook());
+  expect(result.current).toBe('mocked value');
+});
+```
+
+---
+
+## Other Useful Methods
+
+### `beforeEach` and `afterEach`
+
+These methods allow you to run setup and teardown code before and after each test in a suite.
+
+```javascript
+beforeEach(() => {
+  // Setup code
+});
+
+afterEach(() => {
+  // Teardown code
+});
+```
+
+### `beforeAll` and `afterAll`
+
+These methods run setup and teardown code once before and after all tests in a suite.
+
+```javascript
+beforeAll(() => {
+  // Setup code
+});
+
+afterAll(() => {
+  // Teardown code
+});
+```
+
+### `vi.spyOn`
+
+Use `vi.spyOn` to spy on methods of an object. This is useful for verifying that a method is called with the correct arguments. Know more about [how spies work in Vitest](./spies-vitest.md)
+
+```javascript
+const obj = { method: () => 'original' };
+const spy = vi.spyOn(obj, 'method').mockReturnValue('mocked');
+
+expect(obj.method()).toBe('mocked');
+```
+
+### `vi.useFakeTimers`
+
+Mock timers like `setTimeout` and `setInterval` using `vi.useFakeTimers`.
+
+```javascript
+vi.useFakeTimers();
+
+setTimeout(() => {
+  console.log('Hello, World!');
+}, 1000);
+
+vi.advanceTimersByTime(1000);
+```
+
+---
+
+For more detailed information, refer to the [official Vitest documentation](https://vitest.dev/).
+
