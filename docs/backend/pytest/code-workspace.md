@@ -304,5 +304,7 @@ To run the tests, use the following command:
 
 ```bash
 pytest -v
-```
 
+```
+### **Output**
+![alt text](20250205-1401-36.3778064.gif)

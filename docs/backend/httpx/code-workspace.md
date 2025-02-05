@@ -298,3 +298,5 @@ if __name__ == "__main__":
 
 - Executes the `run_tests` function when the script is run directly.
 
+### **Output**
+![alt text](<Recording 2025-02-05 193945.gif>)
