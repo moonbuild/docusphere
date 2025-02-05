@@ -70,7 +70,7 @@ This installs HTTPX along with all optional dependencies, including HTTP/2 and S
 
 ---
 
-### **4. Verifying the Installation**
+### **4. Verifying Installation**
 After installation, verify that HTTPX is installed correctly by checking its version:
 
 ```bash
@@ -81,53 +81,5 @@ This command should output the installed version of HTTPX. If no errors occur, t
 
 
 ---
-
-### **5. Installing from Source**
-If you want to install the latest development version of HTTPX or contribute to its development, you can install it directly from the source code repository on GitHub.
-
-#### **a. Clone the Repository**
-```bash
-git clone https://github.com/encode/httpx.git
-cd httpx
-```
-
-#### **b. Install Dependencies**
-Install the required dependencies using `pip`:
-```bash
-pip install -r requirements.txt
-```
-
-#### **c. Install HTTPX**
-Install HTTPX in editable mode for development purposes:
-```bash
-pip install -e .
-```
-
----
-
-### **6. Troubleshooting Installation Issues**
-
-#### **a. Missing Dependencies**
-If you encounter errors related to missing dependencies (e.g., `h2` for HTTP/2 support), ensure that you've installed the appropriate extras. For example:
-```bash
-pip install httpx[http2]
-```
-
-#### **b. Compatibility Issues**
-Ensure that your Python version meets the minimum requirement (Python 3.7+). If you're using an older version, upgrade Python or use a compatible version of HTTPX.
-
-#### **c. Proxy Issues**
-If you're behind a corporate proxy, configure `pip` to use the proxy:
-```bash
-pip install httpx --proxy http://user:password@proxy.example.com:port
-```
-
-#### **d. SSL Certificate Errors**
-If you encounter SSL certificate errors, ensure that your system's CA certificates are up-to-date. On Linux, you may need to install the `certifi` package:
-```bash
-pip install certifi
-```
-
-
 
 

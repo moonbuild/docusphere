@@ -7,7 +7,7 @@ slug: /backend/pytest
 
 ### **Pytest: An Overview and Key Features for Testing Python Applications**
 
-**Pytest** is a robust, feature-rich testing framework for Python that simplifies the process of writing and running tests. It is widely used for unit testing, integration testing, and functional testing in Python applications. Unlike HTTPX, which is an HTTP client for making real HTTP requests, Pytest focuses on providing a powerful framework for organizing, executing, and validating test cases. When combined with libraries like HTTPX, Pytest becomes a comprehensive tool for testing both application logic and API interactions.
+**Pytest** is a robust, feature-rich testing framework for Python that simplifies the process of writing and running tests. It is widely used for **unit testing, integration testing, and functional testing** in Python applications. Unlike HTTPX, which is an HTTP client for making real HTTP requests, Pytest focuses on providing a powerful framework for organizing, executing, and validating test cases. When combined with libraries like HTTPX, Pytest becomes a comprehensive tool for testing both application logic and API interactions.
 
 ---
 

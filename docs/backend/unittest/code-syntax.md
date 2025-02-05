@@ -1,16 +1,12 @@
 ---
-title: Code Syntax
+title: Unittest Syntax
 displayed-sidebar : backend
 sidebar_position: 3
 
 ---
-## Unittest Syntax and Best Practices
 
-This guide explains the core concepts and syntax for writing tests using **unittest**, from basic tests to testing class-based structures and asynchronous code. `unittest` is a built-in Python testing framework that simplifies the process of writing and organizing tests for Python applications.
 
----
-
-### 1. **Basic Test Syntax**
+## 1. **Basic Test Syntax**
 
 To define a test function, create a class that inherits from `unittest.TestCase`. Each test method must start with the prefix `test_`.
 
@@ -23,9 +19,8 @@ class TestMathOperations(unittest.TestCase):
         self.assertEqual(1 + 1, 2)
 ```
 
-- **Class Inheritance**: The test class must inherit from `unittest.TestCase`.
-- **Test Method**: Any method prefixed with `test_` is recognized as a test.
-- **Assertion**: Use methods like `assertEqual`, `assertTrue`, or `assertFalse` to validate conditions.
+#### **output**:
+![alt text](image.png)
 
 ---
 
@@ -71,13 +66,6 @@ def test_example(self):
     self.assertIsInstance(123, int)       # Type assertion
 ```
 
-- **Equality**: `assertEqual(a, b)`
-- **Inequality**: `assertNotEqual(a, b)`
-- **Boolean**: `assertTrue(condition)` or `assertFalse(condition)`
-- **Containment**: `assertIn(item, collection)`
-- **Type Checking**: `assertIsInstance(obj, type)`
-
----
 
 ### 4. **Running Tests**
 
@@ -125,27 +113,8 @@ class TestAddition(unittest.TestCase):
 
 ---
 
-### 6. **Working with Asynchronous Tests**
 
-For testing asynchronous code, use the `unittest.IsolatedAsyncioTestCase` class introduced in Python 3.8+.
-
-#### Example:
-```python
-import unittest
-import asyncio
-
-class TestAsyncOperations(unittest.IsolatedAsyncioTestCase):
-    async def test_async_addition(self):
-        await asyncio.sleep(1)
-        self.assertEqual(2 + 2, 4)
-```
-
-- **`IsolatedAsyncioTestCase`**: A subclass for testing asynchronous code.
-- **`async def`**: Define asynchronous test methods.
-
----
-
-### 7. **Organizing and Discovering Tests**
+### 6. **Organizing and Discovering Tests**
 
 `unittest` automatically discovers tests in files named `test_*.py` or `*_test.py`. You can organize tests into directories.
 
@@ -157,34 +126,9 @@ tests/
     subdir/
         test_submodule.py
 ```
-
 ---
 
-### 8. **Capturing Output**
-
-Use the `unittest.mock` module to capture output during tests, such as printed statements.
-
-#### Example:
-```python
-import unittest
-from io import StringIO
-import sys
-
-class TestPrintOutput(unittest.TestCase):
-    def test_print_output(self):
-        captured_output = StringIO()
-        sys.stdout = captured_output
-        print("Hello, world!")
-        sys.stdout = sys.__stdout__
-        self.assertEqual(captured_output.getvalue(), "Hello, world!\n")
-```
-
-- **`StringIO`**: Captures standard output.
-- **`sys.stdout`**: Redirects output to a buffer.
-
----
-
-### 9. **Skipping Tests and Expected Failures**
+### 7. **Skipping Tests and Expected Failures**
 
 You can skip tests or mark them as expected failures using decorators.
 
@@ -210,11 +154,11 @@ class TestExample(unittest.TestCase):
 
 ---
 
-### 10. **Testing Class-Based OOP Structures**
+### 8. **Testing Class-Based OOP Structures**
 
 `unittest` supports testing classes and their methods effectively.
 
-#### 10.1 Testing Classes and Methods
+#### 8.1 Testing Classes and Methods
 You can test classes and their methods by creating instances within your tests and verifying their behavior.
 
 ##### Example:
@@ -247,48 +191,9 @@ class TestPerson(unittest.TestCase):
         self.assertFalse(child.is_adult())
 ```
 
-#### 10.2 Using Fixtures with Classes
-Fixtures can create and manage instances of classes for reuse across multiple tests.
 
-##### Example:
-```python
-import unittest
-from person import Person
 
-class TestPerson(unittest.TestCase):
-    def setUp(self):
-        self.person = Person("Diana", 22)
-
-    def test_person_greet_with_fixture(self):
-        self.assertEqual(self.person.greet(), "Hello, my name is Diana and I am 22 years old.")
-```
-
-#### 10.3 Testing Inheritance
-Test whether subclasses correctly extend or override the behavior of parent classes.
-
-##### Example:
-```python
-# employee.py
-class Employee(Person):  # Inherits from Person
-    def __init__(self, name, age, employee_id):
-        super().__init__(name, age)
-        self.employee_id = employee_id
-
-    def greet(self):
-        return f"{super().greet()} My employee ID is {self.employee_id}."
-
-# test_employee.py
-import unittest
-from employee import Employee
-
-class TestEmployee(unittest.TestCase):
-    def test_employee_greet(self):
-        employee = Employee("Eve", 28, "E12345")
-        expected_greeting = "Hello, my name is Eve and I am 28 years old. My employee ID is E12345."
-        self.assertEqual(employee.greet(), expected_greeting)
-```
-
-#### 10.4 Mocking Dependencies in Classes
+#### 8.2 Mocking Dependencies in Classes
 Mock external dependencies, such as database connections or APIs, when testing class behavior.
 
 ##### Example:
@@ -305,7 +210,7 @@ class TestOrder(unittest.TestCase):
         mock_gateway.process_payment.assert_called_once_with(100)
 ```
 
-#### 10.5 Testing Exceptions in Classes
+#### 8.3 Testing Exceptions in Classes
 Verify that classes handle exceptions properly using `assertRaises`.
 
 ##### Example:
@@ -319,3 +224,4 @@ class TestBankAccount(unittest.TestCase):
             BankAccount(-100)
 ```
 
+---

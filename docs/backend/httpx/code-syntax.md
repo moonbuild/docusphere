@@ -1,15 +1,10 @@
 ---
 
-title: Code Syntax 
+title: HTTPX Syntax 
 displayed-sidebar: backend
 sidebar_position: 3
 ---
 
-# **HTTPX Syntax Documentation: Making HTTP Requests in Python**
-
-**HTTPX** is a powerful and modern HTTP client for Python, offering both synchronous and asynchronous capabilities for making HTTP requests. Whether you're making a quick one-off request or handling multiple requests with shared configurations, HTTPX provides the flexibility you need. This documentation covers the two primary ways to make HTTP requests in HTTPX—using **top-level functions** and **client instances**—and explains their syntax, use cases, and performance considerations.
-
----
 
 ## **1. Making HTTP Requests**
 
@@ -37,6 +32,9 @@ response = httpx.post(
 assert response.status_code == 201
 print(response.json())
 ```
+#### **output**
+![alt text](image.png)
+
 
 ### **Asynchronous Requests**
 
@@ -255,12 +253,3 @@ with httpx.Client(base_url="https://api.example.com") as client:
 
 ---
 
-## **5. Conclusion**
-
-Whether you are making a one-off request or dealing with a complex workflow that requires persistent connections, HTTPX provides an efficient and flexible solution for your HTTP requests in Python. 
-
-- **For simple use cases** (like a quick GET or POST request), using **top-level functions** (`httpx.get()`, `httpx.post()`) is perfectly adequate.
-- **For more advanced needs**, such as handling multiple requests, shared configurations, or optimizing for performance with connection pooling, using an **HTTPX client** (`httpx.Client` or `httpx.AsyncClient`) is recommended.
-
-
----

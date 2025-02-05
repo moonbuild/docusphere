@@ -8,6 +8,8 @@ slug: /backend/httpx
 
 **HTTPX** is a modern and powerful HTTP client library for Python designed to handle both **synchronous** and **asynchronous** HTTP requests. Unlike testing frameworks like **Pytest**, HTTPX is a client used for sending real HTTP requests, making it particularly useful for **integration testing** where interacting with an actual API is necessary. It is often paired with testing frameworks like Pytest to simulate real-world HTTP interactions and test how an API responds to various requests.
 
+---
+
 ### Why Use HTTPX?
 
 HTTPX is widely used in modern Python applications due to its flexibility, compatibility with both synchronous and asynchronous code, and support for integration testing. It is often used alongside testing frameworks like Pytest to perform real API calls during tests, providing a high level of confidence in your application’s behavior in production-like environments.
@@ -16,6 +18,8 @@ With HTTPX, developers can:
 - Make **synchronous** and **asynchronous** HTTP requests.
 - Simulate real-world HTTP interactions during **integration testing**.
 - Validate API behavior by sending actual HTTP requests and checking the responses.
+
+---
 
 ### Key Features of HTTPX
 
@@ -77,5 +81,3 @@ During development or testing, you may need to interact with third-party service
 ### Conclusion
 
 **HTTPX** is a powerful and versatile HTTP client that enables you to perform both synchronous and asynchronous HTTP requests. It is especially useful for **integration testing**, where you need to simulate real HTTP requests and validate API behavior. Its support for session management, mocking, and context managers makes it a go-to choice for developers testing backend services and APIs. When used alongside testing frameworks like **Pytest**, HTTPX helps ensure that your API behaves as expected under various real-world scenarios.
-
-Whether you're testing a **FastAPI** application, mocking external services, or validating API responses, HTTPX provides a modern and efficient solution for all your HTTP testing needs.

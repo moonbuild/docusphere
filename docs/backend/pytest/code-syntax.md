@@ -1,14 +1,7 @@
 ---
-title: Code Syntax
+title: Pytest Syntax
 displayed-sidebar : backend
 sidebar_position: 3
-
----
-
-
-# **Pytest Syntax and Best Practices**
-
-This guide explains the core concepts and syntax for writing tests using Pytest, from basic tests to testing class-based structures and asynchronous code. Pytest simplifies the process of writing and organizing tests for Python applications.
 
 ---
 
@@ -21,8 +14,11 @@ def test_addition():
     assert 1 + 1 == 2
 ```
 
-- **Function Name:** Must begin with `test_`.
-- **Assertion:** The `assert` statement checks if the condition is true. If it fails, Pytest reports an error.
+
+
+**output:** 
+![alt text](image.png)
+
 
 ---
 
@@ -42,8 +38,6 @@ def test_user_name(setup_data):
     assert setup_data["name"] == "John"
 ```
 
-- **Fixture Declaration:** Use the `@pytest.fixture` decorator.
-- **Injecting Fixtures:** Fixtures are passed into test functions by name.
 
 ---
 
@@ -63,7 +57,6 @@ def test_addition(input1, input2, expected):
     assert input1 + input2 == expected
 ```
 
-- **Parameterization:** Use `@pytest.mark.parametrize` to specify parameters for the test function.
 
 ---
 
@@ -80,11 +73,11 @@ def test_example():
     assert not isinstance(123, str)  # Type assertion
 ```
 
-- **Types of Assertions:**
+<!-- - **Types of Assertions:**
   - Equality: `assert a == b`
   - Inequality: `assert a != b`
   - Containment: `assert item in collection`
-  - Type Checking: `assert isinstance(obj, type)`
+  - Type Checking: `assert isinstance(obj, type)` -->
 
 ---
 
@@ -102,7 +95,6 @@ pytest tests/           # Run tests in a directory
 
 #### **Command-Line Options:**
 - `-v`: Verbose output.
-- `-k <expression>`: Run tests matching a specific pattern.
 - `--maxfail=<num>`: Stop after a specific number of failures.
 
 ---
@@ -139,24 +131,9 @@ tests/
 
 ---
 
-## **8. Capturing Output**
-Pytest can capture output during tests, such as printed statements.
 
-#### **Example:**
-```python
-import pytest
 
-def test_print_output(capfd):
-    print("Hello, world!")
-    captured = capfd.readouterr()  # Capture printed output
-    assert captured.out == "Hello, world!\n"
-```
-
-- **Fixture:** `capfd` captures standard output and error.
-
----
-
-## **9. Skipping Tests and Expected Failures**
+## **8. Skipping Tests and Expected Failures**
 You can skip tests or mark them as expected failures using decorators.
 
 #### **Skipping a Test:**
@@ -177,10 +154,10 @@ def test_expected_failure():
 
 ---
 
-## **10. Testing Class-Based OOP Structures**
+## **9. Testing Class-Based OOP Structures**
 Pytest supports testing classes and their methods effectively.
 
-### **10.1 Testing Classes and Methods**
+### **9.1 Testing Classes and Methods**
 You can test classes and their methods by creating instances within your tests and verifying their behavior.
 
 #### **Example:**
@@ -215,7 +192,7 @@ def test_person_is_adult():
 
 ---
 
-### **10.2 Using Fixtures with Classes**
+### **9.2 Using Fixtures with Classes**
 Fixtures can create and manage instances of classes for reuse across multiple tests.
 
 #### **Example:**
@@ -233,7 +210,7 @@ def test_person_greet_with_fixture(person_instance):
 
 ---
 
-### **10.3 Testing Inheritance**
+### **9.3 Testing Inheritance**
 Test whether subclasses correctly extend or override the behavior of parent classes.
 
 #### **Example:**
@@ -260,7 +237,7 @@ def test_employee_greet():
 
 ---
 
-### **10.4 Mocking Dependencies in Classes**
+### **9.4 Mocking Dependencies in Classes**
 Mock external dependencies, such as database connections or APIs, when testing class behavior.
 
 #### **Example:**
@@ -279,7 +256,7 @@ def test_order_checkout():
 
 ---
 
-### **10.5 Testing Exceptions in Classes**
+### **9.5 Testing Exceptions in Classes**
 Verify that classes handle exceptions properly using `pytest.raises`.
 
 #### **Example:**
@@ -293,10 +270,3 @@ def test_negative_balance_raises_exception():
 ```
 
 ---
-
-<!-- ## **11. Conclusion**
-Pytest offers a comprehensive framework for testing Python code, from basic functions to complex class-based OOP structures. With powerful features like fixtures, parameterization, asynchronous testing, and mock support, Pytest helps ensure your code is reliable and maintainable.
-
----
-
- -->

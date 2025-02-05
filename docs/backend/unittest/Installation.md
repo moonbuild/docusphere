@@ -4,7 +4,30 @@ displayed-sidebar : backend
 sidebar_position: 2
 
 ---
-### Installation of `unittest` in Python
+
+## **Installation of unittest: A Comprehensive Guide**
+
+This module comes built-in with your Python 3+ installation, so there’s no need to install it using pip.
+
+---
+
+### **1.Prerequisites**
+Before installing unittest, ensure that your environment meets the following requirements:
+
+- **Python Version**: unittest requires Python 3.7 or higher. Verify your Python version by running:
+  ```bash
+  python --version
+  ```
+  If you're using Python 2.x or an older version of Python 3, consider upgrading to a supported version.
+
+- **pip**: Ensure that `pip` (Python's package manager) is installed and up-to-date. Update `pip` using:
+  ```bash
+  pip install --upgrade pip
+  ```
+
+---
+
+### **2. Basic Installation**
 
 One of the most convenient aspects of the **`unittest`** module is that it is part of Python’s **standard library**, which means that you do **not need to install it separately**. If you have Python installed on your system, the `unittest` module is already available for use.
 
@@ -12,7 +35,7 @@ However, it's important to ensure that you are using a supported version of Pyth
 
 ---
 
-### Step 1: Verifying the `unittest` Module
+### **3.Verifying installation**
 
 Since `unittest` is part of the Python standard library, you do not need to install it separately. To verify that the module is available:
 
@@ -27,7 +50,7 @@ Since `unittest` is part of the Python standard library, you do not need to inst
 
 ---
 
-### Step 2: Installing Additional Testing Tools (Optional)
+### **4. Installing Additional Testing Tools (Optional)**
 
 While `unittest` itself is built-in, there are other helpful testing tools that work alongside it. Some common tools you might find useful in combination with `unittest` are:
 
@@ -49,10 +72,3 @@ While `unittest` itself is built-in, there are other helpful testing tools that 
      ```
 
 ---
-
-
-
-
-<!-- ### Conclusion
-
-Since `unittest` is a part of Python’s standard library, no additional installation is required if you are using a supported version of Python. Ensure that you have Python installed on your system, and you can immediately begin writing and running tests using `unittest`. For advanced testing needs, you may want to install additional packages like `pytest` or `mock`. With this setup, you can confidently test your Python code to ensure that it functions correctly and reliably. -->

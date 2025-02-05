@@ -5,12 +5,12 @@ sidebar_position: 4
 
 ---
 
-## **Testing a Notes App API with `httpx` and `FastAPI**
+## **Testing a Notes App API with `httpx` and `FastAPI`**
 
 ### **Purpose**
 The purpose of these tests is to validate the functionality of the **Notes App API** by simulating HTTP requests using the `httpx` library and verifying the responses. These tests cover:
 - Registering a new user.
-- Logging in and generating access/refresh tokens.
+- Logging in and generating access.
 - Refreshing an access token.
 - Creating a new note.
 - Fetching all notes for a user.
@@ -34,17 +34,17 @@ from schemas.note import NoteCreateDTO
 ```
 
 - **`asyncio`**: Enables asynchronous programming for handling non-blocking I/O operations.
-- **`httpx`**: A modern HTTP client for making asynchronous HTTP requests.
-- **`status` from FastAPI**: Provides HTTP status codes for assertions.
+- **`httpx`**  : A modern HTTP client for making asynchronous HTTP requests.
+- **`status`** : Provides HTTP status codes for assertions.
 - **`UserCreateDTO`, `RefreshTokenDTO`, `NoteCreateDTO`**: Pydantic models used for validating request payloads.
 
 ---
 
 #### 2. **Constants**
 ```python
-BASE_URL = "http://192.168.0.193:8000"
+BASE_URL = "http://localhost:8000"
 TEST_USER = {
-    "username": "testuser2",
+    "username": "testuser",
     "password": "testpassword",
     "full_name": "Test User"
 }
