@@ -5,225 +5,275 @@ sidebar_position: 4
 
 ---
 
-Below is the  documentation for testing a FastAPI application with Pytest, incorporating the  examples as needed. The content has been expanded to include explanations for each test case and its relevance to testing database operations using SQLAlchemy's `AsyncSession`.
+### **Code Overview: Testing an API with `pytest` and `FastAPI`**
+
+This Python script demonstrates how to write integration tests for a RESTful API using the `pytest` framework and `FastAPI`. It provides a comprehensive example of testing user registration, authentication (login), token refreshing, and CRUD operations on notes.
+
+---
+### **Purpose**
+The purpose of these tests is to validate the functionality of the **Notes App API** by simulating HTTP requests using the `pytest` library and verifying the responses. These tests cover:
+- Registering a new user.
+- Logging in and generating access/refresh tokens.
+- Refreshing an access token.
+- Creating a new note.
+- Fetching all notes for a user.
+- Fetching a Specific Note.
+- Updating a note.
+- Deleting a note.
+
+Each test ensures that the API adheres to expected behavior, including proper status codes, response data, and database interactions.
 
 ---
 
-## **Testing a FastAPI Application**
+### **Key Components**
 
-FastAPI is a modern web framework for building APIs. Pytest can be used to test FastAPI applications without running the server. This section explains how to test API endpoints and database operations using Pytest and SQLAlchemy's `AsyncSession`.
-
----
-
-### **Setting Up the Test Environment**
-To test a FastAPI application, use the `TestClient` from FastAPI to simulate HTTP requests. Additionally, for database-related tests, you can use an overridden `AsyncSession` to interact with the database in a controlled environment.
-
+#### 1. **Imports**
 ```python
+import pytest
 from fastapi.testclient import TestClient
-from main import app  # Assuming your FastAPI app is defined in main.py
-
-client = TestClient(app)
+from schemas.user import UserCreateDTO, RefreshTokenDTO
+from schemas.note import NoteCreateDTO
+from main import app  
 ```
 
-- **`TestClient`**: Simulates HTTP requests to the FastAPI application without requiring a running server.
-- **Database Testing**: Use an overridden `AsyncSession` to manage database transactions during tests.
+- **`pytest`**: A powerful testing framework for Python.
+- **`TestClient` from FastAPI**: Simulates HTTP requests to the API without requiring a running server.
+- **`UserCreateDTO`, `RefreshTokenDTO`, `NoteCreateDTO`**: Pydantic models used for validating request payloads.
+- **`app`**: The FastAPI application instance.
 
 ---
 
-### **Writing Tests for API Endpoints**
-Here’s an example of testing a `/register/` endpoint:
+#### 2. **Fixtures**
+Fixtures are reusable components that set up the necessary environment for testing.
 
 ```python
-def test_register_user():
-    response = client.post("/register/", json={
-        "username": "testuser",
-        "password": "testpassword",
-        "full_name": "Test User"
-    })
+@pytest.fixture
+def setup_db():
+    """Fixture to initialize the TestClient."""
+    return TestClient(app)
+
+@pytest.fixture
+def authenticated_user():
+    """Fixture to provide a mock authenticated user."""
+    return {
+        "access_token": "mock_access_token",
+        "user": {"id": 1, "username": "testuser"}
+    }
+
+@pytest.fixture
+async def note_dao():
+    """Fixture representing the Data Access Object (DAO) for interacting with the database."""
+    from db.dao import NoteDAO  
+    return NoteDAO()
+```
+
+---
+
+### **Test Functions**
+
+#### **1. Registering a User**
+```python
+@pytest.mark.asyncio
+async def test_register_user(setup_db: TestClient, user_dao):
+    """Test registering a new user."""
+    user_data = UserCreateDTO(username="testuser", password="testpassword", full_name="Test User")
+    response = setup_db.post("/register/", json=user_data.dict())
     assert response.status_code == 200
     assert response.json() == {"message": "User created successfully"}
+    user = await user_dao.get_user_by_username("testuser")
+    assert user is not None
+    assert user.username == "testuser"
+    assert user.full_name == "Test User"
 ```
 
-- **Explanation**:
-  - The `client.post()` method simulates sending a POST request to the `/register/` endpoint.
-  - Assertions validate the HTTP status code (`200 OK`) and the JSON response.
+- **Purpose**: Validates the registration of a new user via a `POST` request.
+- **Key Steps**:
+  - Send a `POST` request to `/register/` with valid user data (username, password, and full name).
+  - Verify that the response status code is `200 OK` and the response message confirms successful user creation (`{"message": "User created successfully"}`).
+  - Query the database using the `user_dao` fixture to retrieve the newly registered user by their username.
+  - Validate that the user exists in the database and that their details (username and full name) match the input data.
 
 ---
 
-### **Testing Asynchronous Routes**
-If your FastAPI app includes asynchronous routes, use `pytest-asyncio` to test them.
-
+#### **2. Login and Token Generation**
 ```python
-import pytest
-from fastapi.testclient import TestClient
-from main import app
-
-client = TestClient(app)
-
 @pytest.mark.asyncio
-async def test_async_route():
-    response = client.get("/async-endpoint/")
+async def test_login_and_get_tokens(setup_db: TestClient, authenticated_user):
+    """Test logging in and retrieving access and refresh tokens."""
+    response = setup_db.post(
+        "/token/",
+        data={"username": authenticated_user["user"]["username"], "password": "testpassword"}
+    )
     assert response.status_code == 200
-    assert response.json() == {"message": "Success"}
+    tokens = response.json()
+    assert "access_token" in tokens
+    assert "refresh_token" in tokens
+    assert tokens["token_type"] == "bearer"
 ```
 
-- **Explanation**:
-  - The `@pytest.mark.asyncio` decorator ensures that the test runs asynchronously.
-  - The `client.get()` method simulates sending a GET request to the `/async-endpoint/`.
+- **Purpose**: Validates the login process and retrieval of access and refresh tokens.
+- **Key Steps**:
+  - Send a `POST` request to `/token/` with valid credentials.
+  - Verify that the response contains both `access_token` and `refresh_token`, and that the token type is `bearer`.
 
 ---
 
-### **Testing Database Operations with SQLAlchemy**
-For database-related tests, use SQLAlchemy's `AsyncSession` to interact with the database. Below are examples of CRUD (Create, Read, Update, Delete) operations and their corresponding tests.
-
-#### **1. Creating a Note**
-```python
-import pytest
-from sqlalchemy.ext.asyncio import AsyncSession
-from models.model import Note
-from dao.note_dao import NoteDAO
-
-@pytest.mark.asyncio
-async def test_create_note(override_get_db: AsyncSession):
-    """Test creating a new note"""
-    async with override_get_db as db:
-        note_dao = NoteDAO(db)
-        note = await note_dao.create_note(title="Test Title", body="Test Body", user_id=1)
-        assert note is not None
-        assert note.title == "Test Title"
-        assert note.body == "Test Body"
-        assert note.user_id == 1
-```
-
-- **Explanation**:
-  - The `override_get_db` fixture provides an `AsyncSession` instance for database interactions.
-  - The `create_note` method inserts a new record into the database.
-  - Assertions verify that the returned object matches the input data.
-
----
-
-#### **2. Retrieving a Note by ID**
+#### **3. Token Refresh**
 ```python
 @pytest.mark.asyncio
-async def test_get_note_by_id(override_get_db: AsyncSession):
-    """Test retrieving a note by its ID"""
-    async with override_get_db as db:
-        note_dao = NoteDAO(db)
-        created_note = await note_dao.create_note(title="Test Note", body="Sample Content", user_id=1)
-        retrieved_note = await note_dao.get_note_by_id(created_note.note_id)
-        assert retrieved_note is not None
-        assert retrieved_note.title == "Test Note"
-        assert retrieved_note.body == "Sample Content"
+async def test_refresh_access_token(setup_db: TestClient, authenticated_user):
+    """Test refreshing the access token using a refresh token."""
+    tokens = await test_login_and_get_tokens(setup_db, authenticated_user)
+    response = setup_db.post(
+        "/refresh/",
+        json=RefreshTokenDTO(refresh_token=tokens["refresh_token"]).dict()
+    )
+    assert response.status_code == 200
+    new_tokens = response.json()
+    assert "access_token" in new_tokens
+    assert new_tokens["token_type"] == "bearer"
 ```
 
-- **Explanation**:
-  - A note is created and then retrieved using its `note_id`.
-  - Assertions ensure that the retrieved note matches the original data.
+- **Purpose**: Validates the ability to refresh an access token using a refresh token.
+- **Key Steps**:
+  - Use the `refresh_token` obtained during login to send a `POST` request to `/refresh/`.
+  - Verify that the response contains a new `access_token` and that the token type is `bearer`.
 
 ---
 
-#### **3. Retrieving All Notes for a User**
+#### **4. Creating a Note**
 ```python
 @pytest.mark.asyncio
-async def test_get_notes_by_user(override_get_db: AsyncSession):
-    """Test retrieving all notes for a user"""
-    async with override_get_db as db:
-        note_dao = NoteDAO(db)
-        await note_dao.create_note(title="Note 1", body="Content 1", user_id=1)
-        await note_dao.create_note(title="Note 2", body="Content 2", user_id=1)
-        notes = await note_dao.get_notes_by_user(1)
-        assert len(notes) == 2
-        assert notes[0].title == "Note 1"
-        assert notes[1].title == "Note 2"
+async def test_create_note(setup_db: TestClient, authenticated_user, note_dao):
+    """Test creating a new note."""
+    note_data = NoteCreateDTO(title="Test Note", body="This is a test note.")
+    response = setup_db.post(
+        "/note/",
+        json=note_data.dict(),
+        headers={"Authorization": f"Bearer {authenticated_user['access_token']}"}
+    )
+    assert response.status_code == 200
+    response_data = response.json()
+    assert response_data["title"] == note_data.title
+    assert response_data["body"] == note_data.body
+    assert response_data["user_id"] == authenticated_user["user"].id
+    note = await note_dao.get_note_by_id(response_data["note_id"])
+    assert note is not None
+    assert note.title == note_data.title
+    assert note.body == note_data.body
 ```
 
-- **Explanation**:
-  - Multiple notes are created for the same user.
-  - The `get_notes_by_user` method retrieves all notes associated with the user.
-  - Assertions validate the number of notes and their content.
+- **Purpose**: Validates the creation of a new note via a `POST` request.
+- **Key Steps**:
+  - Send a `POST` request with valid data and authentication headers.
+  - Verify the response status code and payload.
+  - Check the database to ensure the note was created.
 
 ---
 
-#### **4. Updating a Note**
+#### **5. Fetching All Notes**
 ```python
 @pytest.mark.asyncio
-async def test_update_note(override_get_db: AsyncSession):
-    """Test updating an existing note"""
-    async with override_get_db as db:
-        note_dao = NoteDAO(db)
-        note = await note_dao.create_note(title="Old Title", body="Old Body", user_id=1)
-        updated_note = await note_dao.update_note(note.note_id, title="New Title", body="New Body")
-        assert updated_note is not None
-        assert updated_note.title == "New Title"
-        assert updated_note.body == "New Body"
+async def test_get_notes(setup_db: TestClient, authenticated_user, note_dao):
+    """Test fetching all notes for the current user."""
+    note1 = await note_dao.create_note(title="Note 1", body="Body 1", user_id=authenticated_user["user"].id)
+    note2 = await note_dao.create_note(title="Note 2", body="Body 2", user_id=authenticated_user["user"].id)
+    response = setup_db.get(
+        "/note/all",
+        headers={"Authorization": f"Bearer {authenticated_user['access_token']}"}
+    )
+    assert response.status_code == 200
+    response_data = response.json()
+    assert len(response_data) == 2
+    assert response_data[0]["title"] == "Note 1"
+    assert response_data[1]["title"] == "Note 2"
 ```
 
-- **Explanation**:
-  - A note is created and then updated with new values.
-  - Assertions confirm that the update was successful.
+- **Purpose**: Validates fetching all notes for an authenticated user via a `GET` request.
+- **Key Steps**:
+  - Create two notes in the database.
+  - Send a `GET` request to fetch all notes.
+  - Verify the response contains the correct number of notes and their details.
 
 ---
 
-#### **5. Updating a Non-Existent Note**
+#### **6. Fetching a Specific Note**
 ```python
 @pytest.mark.asyncio
-async def test_update_non_existent_note(override_get_db: AsyncSession):
-    """Test updating a note that doesn't exist"""
-    async with override_get_db as db:
-        note_dao = NoteDAO(db)
-        updated_note = await note_dao.update_note(note_id=999, title="Updated Title", body="Updated Body")
-        assert updated_note is None
+async def test_get_note_by_id(setup_db: TestClient, authenticated_user, note_dao):
+    """Test fetching a note by its ID."""
+    note = await note_dao.create_note(title="Test Note", body="This is a test note.", user_id=authenticated_user["user"].id)
+    response = setup_db.get(
+        f"/note/{note.note_id}",
+        headers={"Authorization": f"Bearer {authenticated_user['access_token']}"}
+    )
+    assert response.status_code == 200
+    response_data = response.json()
+    assert response_data["title"] == "Test Note"
+    assert response_data["body"] == "This is a test note."
 ```
 
-- **Explanation**:
-  - Attempting to update a non-existent note should return `None`.
-  - Assertions ensure that the function handles invalid inputs gracefully.
+- **Purpose**: Validates fetching a specific note by its ID via a `GET` request.
+- **Key Steps**:
+  - Create a note in the database.
+  - Send a `GET` request with the note's ID.
+  - Verify the response contains the correct note details.
 
 ---
 
-#### **6. Deleting a Note**
+#### **7. Updating a Note**
 ```python
 @pytest.mark.asyncio
-async def test_delete_note(override_get_db: AsyncSession):
-    """Test deleting a note"""
-    async with override_get_db as db:
-        note_dao = NoteDAO(db)
-        note = await note_dao.create_note(title="Delete Me", body="Some Body", user_id=1)
-        deleted_note = await note_dao.delete_note(note.note_id)
-        assert deleted_note is not None
-        fetched_note = await note_dao.get_note_by_id(note.note_id)
-        assert fetched_note is None
+async def test_update_note(setup_db: TestClient, authenticated_user, note_dao):
+    """Test updating a note."""
+    note = await note_dao.create_note(title="Test Note", body="This is a test note.", user_id=authenticated_user["user"].id)
+    updated_note_data = NoteCreateDTO(title="Updated Title", body="Updated Body")
+    response = setup_db.put(
+        f"/note/{note.note_id}",
+        json=updated_note_data.dict(),
+        headers={"Authorization": f"Bearer {authenticated_user['access_token']}"}
+    )
+    assert response.status_code == 200
+    response_data = response.json()
+    assert response_data["title"] == updated_note_data.title
+    assert response_data["body"] == updated_note_data.body
 ```
 
-- **Explanation**:
-  - A note is created and then deleted.
-  - Assertions verify that the note no longer exists in the database.
+- **Purpose**: Validates updating an existing note via a `PUT` request.
+- **Key Steps**:
+  - Create a note in the database.
+  - Send a `PUT` request with updated data.
+  - Verify the response reflects the updated details.
 
 ---
 
-#### **7. Deleting a Non-Existent Note**
+#### **8. Deleting a Note**
 ```python
 @pytest.mark.asyncio
-async def test_delete_non_existent_note(override_get_db: AsyncSession):
-    """Test deleting a note that doesn't exist"""
-    async with override_get_db as db:
-        note_dao = NoteDAO(db)
-        deleted_note = await note_dao.delete_note(note_id=999)
-        assert deleted_note is None
+async def test_delete_note(setup_db: TestClient, authenticated_user, note_dao):
+    """Test deleting a note."""
+    note = await note_dao.create_note(title="Test Note", body="This is a test note.", user_id=authenticated_user["user"].id)
+    response = setup_db.delete(
+        f"/note/{note.note_id}",
+        headers={"Authorization": f"Bearer {authenticated_user['access_token']}"}
+    )
+    assert response.status_code == 204
+    deleted_note = await note_dao.get_note_by_id(note.note_id)
+    assert deleted_note is None
 ```
 
-- **Explanation**:
-  - Attempting to delete a non-existent note should return `None`.
-  - Assertions ensure that the function handles invalid inputs gracefully.
+- **Purpose**: Validates deleting a note via a `DELETE` request.
+- **Key Steps**:
+  - Create a note in the database.
+  - Send a `DELETE` request with the note's ID.
+  - Verify the response status code and that the note no longer exists in the database.
 
 ---
 
-### **Key Points**
-1. **No Running Server**: The `TestClient` interacts directly with the FastAPI app, eliminating the need for a running server.
-2. **Asynchronous Support**: Use `pytest-asyncio` for testing async routes and database operations.
-3. **Assertions**: Validate status codes, JSON responses, and database interactions to ensure correctness.
-4. **Database Testing**: Use an overridden `AsyncSession` to manage database transactions during tests, ensuring isolation and repeatability.
+### **Entry Point**
+To run the tests, use the following command:
 
----
+```bash
+pytest -v
+```
 
-This enhanced documentation provides a comprehensive guide to testing FastAPI applications, including both API endpoints and database operations. Each test case is accompanied by an explanation to help users understand its purpose and implementation. Let me know if you'd like further refinements!
