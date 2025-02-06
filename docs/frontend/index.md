@@ -68,7 +68,7 @@ test('successful login', async ({ page }) => {
   await page.click('button[type="submit"]');
   await expect(page).toHaveURL('https://example.com/dashboard');
 });
-
+``
 
 ### 2. Execution Environment
 
@@ -117,20 +117,8 @@ export default defineConfig({
 - Automatic type checking during tests.
 - No need for additional type definition packages.
 
-### 3. Performance Benchmarks
 
-| Task              | Vitest | Jest  |
-|-------------------|--------|-------|
-| 100 Unit Tests    | 1.2s   | 4.8s  |
-| Test Watch Mode   | 200ms  | 800ms |
-
-### 4. Modern Feature Support
-
-- Concurrent test execution.
-- Native ESM modules.
-- Built-in coverage reports.
-
-### 5. Trend (Support)
+### Trend (Support)
 
 <PackageTrendDashboard />
 
@@ -139,8 +127,7 @@ export default defineConfig({
 | Scenario                  | Recommended Tool | Example Use Case          |
 |---------------------------|------------------|---------------------------|
 | Unit/Integration Tests    | Vitest           | Form validation logic     |
-| Component Interaction     | Cypress          | Dashboard widget behavior |
-| Full User Journeys        | Cypress          | Checkout flow             |
+| Full User Journeys        | Cypress / Playwright         | Checkout flow             |
 | Legacy Projects           | Jest             | AngularJS applications    |
 
 ## Types of Testing
@@ -161,13 +148,13 @@ export default defineConfig({
 ### Integration Testing
 
 - **Definition**: Testing the interaction between multiple units or components.
-- **Tools**: Vitest, Jest, Cypress.
+- **Tools**: Vitest, Jest, Cypress, Playwright.
 - **Diagram**:
   ```mermaid
   graph TD;
     A[Integration Testing] --> B[Vitest];
     A --> C[Jest];
-    A --> D[Cypress];
+    A --> D[Cypress / Playwright ];
     B --> E[Component Interaction];
     C --> F[API Integration];
     D --> G[User Workflows];
@@ -176,18 +163,18 @@ export default defineConfig({
 ### End-to-End Testing
 
 - **Definition**: Testing the entire application flow from the user's perspective.
-- **Tools**: Cypress.
+- **Tools**: Cypress and Playwright.
 - **Diagram**:
   ```mermaid
   graph TD;
-    A[End-to-End Testing] --> B[Cypress];
+    A[End-to-End Testing] --> B[Cypress / Playwright];
     B --> C[Real Browser Testing];
     B --> D[User Journeys];
   ```
 
 ## Conclusion
 
-For React + Vite + TypeScript projects, Vitest provides the best developer experience with minimal configuration, blazing-fast speeds, and seamless integration with modern tooling. Cypress remains essential for critical user journey validation but should complement rather than replace Vitest in the testing strategy.
+For React + Vite + TypeScript projects, Vitest provides the best developer experience with minimal configuration, blazing-fast speeds, and seamless integration with modern tooling. Cypress and Playwright remains essential for critical user journey validation but should complement rather than replace Vitest in the testing strategy.
 
 
 
