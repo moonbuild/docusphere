@@ -20,7 +20,7 @@ class TestMathOperations(unittest.TestCase):
 ```
 
 #### **output**:
-![alt text](image.png)
+![alt text](assets/image.png)
 
 ---
 
@@ -34,11 +34,9 @@ import unittest
 
 class TestDatabaseOperations(unittest.TestCase):
     def setUp(self):
-        # Code to run before each test
         self.database = {"user": "admin", "password": "12345"}
 
     def tearDown(self):
-        # Code to run after each test
         self.database.clear()
 
     def test_database_user(self):

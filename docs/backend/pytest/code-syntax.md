@@ -17,7 +17,7 @@ def test_addition():
 
 
 **output:** 
-![alt text](image.png)
+![alt text](assets/image.png)
 
 
 ---
