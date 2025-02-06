@@ -68,7 +68,7 @@ test('successful login', async ({ page }) => {
   await page.click('button[type="submit"]');
   await expect(page).toHaveURL('https://example.com/dashboard');
 });
-``
+```
 
 ### 2. Execution Environment
 
