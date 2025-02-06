@@ -87,7 +87,7 @@ npm run test
 
 ---
 
-## **Conclusion**  
+## **Summary**  
 ✅ **React Testing Library** improves test reliability by focusing on real-world user interactions.  
 ✅ It **avoids testing internals** and ensures tests are **maintainable** through refactors.  
 ✅ Works great with modern testing tools like **Vitest**, improving speed and DX.  

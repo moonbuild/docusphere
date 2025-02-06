@@ -86,7 +86,4 @@ describe('MyComponent', () => {
 - **Making Assertions**: `expect` is used to verify component behavior.
 - **Handling Asynchronous Code**: `waitFor` ensures assertions happen after state updates.
 
-## Conclusion
-
-By using these utilities, we can write tests that closely resemble real user interactions, ensuring our React components function correctly. `@testing-library/react` and `@testing-library/user-event` help create **maintainable, user-focused tests** that adapt well to UI changes over time.
 

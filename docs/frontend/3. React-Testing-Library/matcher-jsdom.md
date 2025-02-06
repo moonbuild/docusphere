@@ -98,7 +98,4 @@ expect(button).toBeDisabled();
 expect(input).toBeRequired();
 ```
 
-## Conclusion
-
-Using these matchers makes testing React components with Jest and Vitest more intuitive. They provide a readable and expressive way to assert the presence, visibility, and attributes of elements in the DOM. 
 
