@@ -12,9 +12,11 @@ import TabItem from '@theme/TabItem';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
 
-# Comparison of Testing Tools: Vitest, Jest, and Cypress
 
-Vitest, Jest, and Cypress are popular testing tools in the JavaScript ecosystem, each serving distinct purposes and excelling in different scenarios. This guide compares these tools, highlighting their strengths, use cases, and practical examples.
+
+# Comparison of Testing Tools: Vitest, Jest, Playwright and Cypress
+
+Vitest, Jest, Playwright and Cypress are popular testing tools in the JavaScript ecosystem, each serving distinct purposes and excelling in different scenarios. This guide compares these tools, highlighting their strengths, use cases, and practical examples.
 
 ## Core Differences Between Testing Tools
 
@@ -52,15 +54,27 @@ Vitest, Jest, and Cypress are popular testing tools in the JavaScript ecosystem,
   });
   ```
 
+#### Playwright (End-to-End/UI Testing)
+
+- **Focus**: Playwright is designed for reliable end-to-end testing with robust browser automation features.
+- **Example of UI Testing**:
+  
+```javascript title="login.spec.js"
+const { test, expect } = require('@playwright/test');
+
+test('successful login', async ({ page }) => {
+  await page.goto('https://example.com/login');
+  await page.fill('input[name="email"]', 'test@example.com');
+  await page.click('button[type="submit"]');
+  await expect(page).toHaveURL('https://example.com/dashboard');
+});
+
+
 ### 2. Execution Environment
 
 - **Vitest/Jest**: Run in Node.js using JSDOM for browser simulation. This allows for fast, isolated tests.
-- **Cypress**: Executes tests in real browsers (Chrome, Firefox, Edge), providing a more accurate representation of user interactions but at a slower pace.
+- **Cypress/Playwright**: Runs in real browsers with better debugging tools and multi-browser support.
 
-### 3. Speed
-
-- **Vitest**: Generally 3-5x faster than Jest due to Vite's Hot Module Replacement (HMR), making it ideal for rapid development cycles.
-- **Cypress**: Slower due to browser automation, but provides more realistic test results.
 
 ## Component Testing Challenges in Cypress
 
@@ -81,7 +95,7 @@ Vitest, Jest, and Cypress are popular testing tools in the JavaScript ecosystem,
 - **Faster Iteration**: Tests update instantly with code changes via HMR in Vitest.
 - **Native JSX Handling**: Both tools handle JSX natively, making it easier to test React components.
 
-## Why Vitest Shines for React + Vite + TypeScript
+## Why Vitest is better for React + Vite + TypeScript for component testing
 
 ### 1. Zero-Config Vite Integration
 
