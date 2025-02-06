@@ -214,3 +214,9 @@ if __name__ == "__main__":
 - Executes all test cases when the script is run directly.
 
 ---
+
+### **Output**
+
+![alt text](dao-1.gif)
+
+---
