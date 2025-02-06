@@ -1,0 +1,98 @@
+[
+  {
+    "id": "index",
+    "title": "index",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "main",
+    "title": "displayed-sidebar : app1",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "code-syntax",
+    "title": "code-syntax",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "code-workspace",
+    "title": "code-workspace",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "general-overview",
+    "title": "general-overview",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "references",
+    "title": "references",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "tutorial-video",
+    "title": "tutorial-video",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "expect-matcher",
+    "title": "Vitest Expect Matchers",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "getting-started",
+    "title": "Configuring Vitest in Vite",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "spies-vitest",
+    "title": "spies-vitest",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "testing-react-query",
+    "title": "testing-react-query",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "testing-routes",
+    "title": "Login Functionality Test Suite",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "key-imports",
+    "title": "key-imports",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "matcher-jsdom",
+    "title": "matcher-jsdom",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "screen-object",
+    "title": "screen-object",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "intro",
+    "title": "intro",
+    "linkTo": [],
+    "referencedBy": []
+  }
+]
