@@ -33,7 +33,7 @@ assert response.status_code == 201
 print(response.json())
 ```
 #### **output**
-![alt text](image.png)
+![alt text](assets/image.png)
 
 
 ### **Asynchronous Requests**

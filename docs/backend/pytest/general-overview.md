@@ -25,83 +25,27 @@ Pytest is one of the most popular testing frameworks in the Python ecosystem due
 #### 1. **Simple and Intuitive Syntax**
 Pytest uses a simple and intuitive syntax for writing tests. Test functions are identified by names starting with `test_`, and assertions are made using Python's built-in `assert` statement. This eliminates the need for specialized assertion methods, making tests easy to write and understand.
 
-<!-- - **Example**:
-  ```python
-  def test_addition():
-      assert 1 + 1 == 2
-  ``` -->
 
 #### 2. **Fixtures for Setup and Teardown**
 Fixtures are one of Pytest's standout features. They allow you to define reusable setup and teardown logic for tests, reducing redundancy and improving maintainability. Fixtures can be scoped at different levels (function, module, session) and injected into test functions as needed.
 
-<!-- - **Example**:
-  ```python
-  import pytest
-
-  @pytest.fixture
-  def sample_data():
-      return {"key": "value"}
-
-  def test_sample_data(sample_data):
-      assert sample_data["key"] == "value"
-  ``` -->
 
 #### 3. **Parameterized Testing**
 Pytest supports parameterized testing, enabling you to run the same test with multiple sets of inputs. This is particularly useful for testing edge cases and ensuring comprehensive coverage.
 
-<!-- - **Example**:
-  ```python
-  import pytest
-
-  @pytest.mark.parametrize("input1, input2, expected", [
-      (1, 1, 2),
-      (2, 2, 4),
-      (3, 3, 6)
-  ])
-  def test_addition(input1, input2, expected):
-      assert input1 + input2 == expected
-  ``` -->
 
 #### 4. **Asynchronous Testing**
 Pytest integrates seamlessly with asynchronous code through the `pytest-asyncio` plugin. This makes it ideal for testing applications built with asynchronous frameworks like **FastAPI**.
 
-<!-- - **Example**:
-  ```python
-  import pytest
-  import asyncio
 
-  @pytest.mark.asyncio
-  async def test_async_function():
-      await asyncio.sleep(1)
-      assert 1 + 1 == 2
-  ``` -->
 
 #### 5. **Mocking and Dependency Injection**
 Pytest works well with mocking libraries like `unittest.mock` to simulate external dependencies during tests. This is particularly useful for isolating components and testing them independently.
 
-<!-- - **Example**:
-  ```python
-  from unittest.mock import MagicMock
-
-  def test_mock_dependency():
-      mock_service = MagicMock()
-      mock_service.process.return_value = "Success"
-      assert mock_service.process() == "Success"
-  ``` -->
 
 #### 6. **Detailed Error Reporting**
 Pytest provides detailed and human-readable error messages when tests fail. This makes debugging easier and reduces the time spent identifying issues.
 
-<!-- - **Example**:
-  ```python
-  def test_failure():
-      assert [1, 2, 3] == [1, 2, 4]
-  ```
-  - **Output**:
-    ```
-    E       assert [1, 2, 3] == [1, 2, 4]
-    E         At index 2 diff: 3 != 4
-    ``` -->
 
 #### 7. **Plugin Ecosystem**
 Pytest has a rich ecosystem of plugins that extend its functionality. Popular plugins include:

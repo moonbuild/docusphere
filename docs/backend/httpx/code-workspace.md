@@ -5,7 +5,13 @@ sidebar_position: 4
 
 ---
 
-## **Testing a Notes App API with `httpx` and `FastAPI`**
+### **Code Overview: Testing an API with `httpx` and `FastAPI`**
+
+This Python script demonstrates how to write integration tests for a RESTful API using the `httpx` framework and `FastAPI`. It provides a comprehensive example of testing user registration, authentication (login), token refreshing, and CRUD operations on notes.
+
+[![Refer to Repo for Details](https://img.shields.io/badge/GitHub-Refer%20to%20Repo%20for%20Details-blue?logo=github)](https://github.com/CGS26/Notes_app/tree/main/Backend/tests/httpx)
+
+---
 
 ### **Purpose**
 The purpose of these tests is to validate the functionality of the **Notes App API** by simulating HTTP requests using the `httpx` library and verifying the responses. These tests cover:
@@ -53,45 +59,6 @@ TEST_USER = {
 - **`BASE_URL`**: The base URL of the API being tested.
 - **`TEST_USER`**: A dictionary containing test user credentials for registration and login.
 
-<!-- ---
-
-#### 3. **Helper Functions**
-```python
-def get_headers(access_token):
-    return {"Authorization": f"Bearer {access_token}"}
-```
-
-- **`get_headers`**: Constructs the `Authorization` header required for authenticated requests. -->
-
----
-<!-- 
-### **Best Practices Highlighted**
-
-1. **Asynchronous Testing**:
-   - The use of `asyncio` and `httpx.AsyncClient` ensures that asynchronous operations (e.g., HTTP requests) are handled properly during testing.
-
-2. **Authentication**:
-   - Tests include headers with an access token (`Authorization: Bearer`) to simulate authenticated requests.
-
-3. **Database Validation**:
-   - After performing API operations, the tests verify the state of the database to ensure consistency.
-
-4. **Schema Validation**:
-   - The `NoteCreateDTO` schema is used to construct valid payloads for API requests, ensuring that the input matches the expected format.
-
-5. **Comprehensive Assertions**:
-   - Each test includes multiple assertions to validate:
-     - HTTP status codes (e.g., `200 OK`, `204 No Content`).
-     - Response data (e.g., title, body, user ID).
-     - Database state (e.g., whether a note was created, updated, or deleted).
-
-6. **Modular Design**:
-   - Each test function focuses on a single responsibility, making the code easier to maintain and debug.
-
-7. **Error Handling**:
-   - Captures and reports errors during test execution, ensuring clear feedback when a test fails.
-
---- -->
 
 ### **Code Overview**
 
@@ -299,4 +266,4 @@ if __name__ == "__main__":
 - Executes the `run_tests` function when the script is run directly.
 
 ### **Output**
-![alt text](<Recording 2025-02-05 193945.gif>)
+![alt text](assets/output.gif)

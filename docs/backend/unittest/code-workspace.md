@@ -6,15 +6,21 @@ sidebar_position: 3
 ---
 
 
-## **Testing a Notes App DAO with `unittest` and `AsyncMock`**
+<!-- ### **Testing a Notes App DAO with `unittest` and `AsyncMock`** -->
+### **Code Overview: Testing an API with `unittest` and `FastAPI`**
 
+This Python script demonstrates how to write integration tests for a RESTful API using the `unittest` framework and `FastAPI`. It provides a comprehensive example of CRUD operations on notes.
+
+
+[![Refer to Repo for Details](https://img.shields.io/badge/GitHub-Refer%20to%20Repo%20for%20Details-blue?logo=github)](https://github.com/CGS26/Notes_app/tree/main/Backend/tests/unittest)
+
+---
 ### **Purpose**
 The purpose of these tests is to validate the functionality of the **Notes App Data Access Object (DAO)** by simulating database interactions using `unittest` and `AsyncMock`. These tests cover:
 - Creating a new note.
 - Updating an existing note.
 - Deleting a note.
 
-Each test ensures that the DAO adheres to expected behavior, including proper handling of database operations, response data, and edge cases.
 
 ---
 
@@ -171,6 +177,6 @@ if __name__ == "__main__":
 
 ### **Output**
 
-![alt text](dao-1.gif)
+![alt text](assets/dao-1.gif)
 
 ---

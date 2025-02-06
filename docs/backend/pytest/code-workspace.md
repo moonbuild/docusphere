@@ -9,6 +9,10 @@ sidebar_position: 4
 
 This Python script demonstrates how to write integration tests for a RESTful API using the `pytest` framework and `FastAPI`. It provides a comprehensive example of testing user registration, authentication (login), token refreshing, and CRUD operations on notes.
 
+
+[![Refer to Repo for Details](https://img.shields.io/badge/GitHub-Refer%20to%20Repo%20for%20Details-blue?logo=github)](https://github.com/CGS26/Notes_app/tree/main/Backend/tests/pytest)
+
+ 
 ---
 ### **Purpose**
 The purpose of these tests is to validate the functionality of the **Notes App API** by simulating HTTP requests using the `pytest` library and verifying the responses. These tests cover:
@@ -307,4 +311,4 @@ pytest -v
 
 ```
 ### **Output**
-![alt text](20250205-1401-36.3778064.gif)
+![alt text](assets/20250205-1401-36.3778064.gif)
