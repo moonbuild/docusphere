@@ -28,7 +28,7 @@ Ensure you have the following installed on your system:
 
 3. Install the dependencies:
    ```bash
-   npm install
+   npm install --legacy-peer-deps
    ```
 
 ### Running the Project
