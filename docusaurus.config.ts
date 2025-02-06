@@ -13,17 +13,17 @@ const config: Config = {
   //   {
   //      docsDir: "docs",}] ],
   // Set the production url of your site here
-  url: 'https://example.com',
+  url: 'https://moonbuild.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/docusphere/',
   markdown: {
     mermaid: true,
   },                                                                                                                  
   themes: ['@docusaurus/theme-mermaid'],
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'DocuSphere', // Usually your GitHub org/user name.
+  organizationName: 'docusphere', // Usually your GitHub org/user name.
   projectName: 'docusphere', // Usually your repo name.
 
   onBrokenLinks: 'throw',
