@@ -1,21 +1,11 @@
 ---
-title: Main
+title: Conclusion
 sidebar_label: Conclusion
 displayed_sidebar : backend
 sidebar_position: 2
 ---
 
 
-
-### Key Notes on HTTPX:
-1. **Not a Testing Framework**: HTTPX is primarily an HTTP client library, not a testing framework. It is used to send HTTP requests and validate responses.
-2. **Integration with Testing Frameworks**: HTTPX is often paired with **Pytest** or **Unittest** to write integration or end-to-end tests for APIs.
-3. **Asynchronous Support**: HTTPX supports both synchronous and asynchronous workflows, making it ideal for testing modern web applications.
-4. **Mocking with Respx**: When combined with libraries like **Respx**, HTTPX can mock HTTP requests, enabling you to simulate API responses during testing.
-5. **Detailed Response Handling**: HTTPX provides rich response objects (status codes, headers, JSON parsing, etc.), which are essential for validating API behavior.
-
-
----
 
 ## **Testing Framework Comparison: pytest vs unittest vs HTTPX**
 
@@ -43,35 +33,6 @@ sidebar_position: 2
 | **Error Handling in Tests**      | Uses custom error messages for failed assertions and test statuses.                                                                                        | Logs errors with traceback for failed assertions.                                               | Focuses on HTTP errors (e.g., `HTTPException`, connection errors, and timeouts) rather than specific test cases.                 |
 
 ---
-
-
-## **When to Use Each Framework/Library**
-
-#### **Pytest**
-- **Best For**: Modern, modular, and scalable testing.
-- **Why Choose It?**:
-  - Rich plugin ecosystem (e.g., `pytest-xdist` for parallel execution).
-  - Flexible fixtures for managing test dependencies.
-  - Built-in support for parameterized tests.
-  - Easier to write and maintain tests with Python's native `assert`.
-
-#### **Unittest**
-- **Best For**: Small projects or when sticking to Python's standard library.
-- **Why Choose It?**:
-  - No additional installation required (part of Python's standard library).
-  - Structured OOP approach with test classes and methods.
-  - Suitable for developers who prefer a more traditional testing style.
-
-#### **HTTPX**
-- **Best For**: API testing and making HTTP requests.
-- **Why Choose It?**:
-  - Supports both synchronous and asynchronous HTTP requests.
-  - Works seamlessly with testing frameworks like Pytest and Unittest.
-  - Provides detailed response objects for validating API behavior.
-
----
-
-
 
 ## **Conclusion**
 
