@@ -1,0 +1,72 @@
+---
+title: General Overview
+displayed-sidebar : frontend
+sidebar_position: 1
+slug: /frontend/vitest
+authors: [tanishq]
+---
+
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Vitest Overview
+
+Vitest is a modern testing framework designed to seamlessly integrate with Vite, a next-generation frontend build tool. It offers a fast, efficient, and developer-friendly testing experience, making it an excellent choice for modern web development.
+
+:::tip
+TL;DR
+[Getting Started Guide](./getting-started.md).
+:::
+
+## Why Use Vitest?
+
+Vitest stands out due to its speed and simplicity. Here are some key reasons to consider using Vitest:
+
+- **Blazing Fast**: Leverages Vite's fast development server for instant feedback.
+- **Zero Configuration**: Minimal setup required, allowing you to focus on writing tests.
+- **Hot Module Replacement (HMR)**: Supports HMR for a smooth development experience.
+- **TypeScript Support**: First-class TypeScript support for type-safe tests.
+- **Compatible with Jest**: Vitest is designed to be compatible with Jest, making it easy to migrate existing tests.
+
+## Component Testing with Vitest
+
+Vitest excels in component testing, allowing you to test individual components in isolation. This ensures that each component behaves as expected, leading to more reliable and maintainable code. Vitest supports various testing strategies, including unit tests, integration tests, and snapshot testing.
+
+```jsx title='Example of a simple component test'
+import { describe, it, expect } from 'vitest';
+import { render } from '@testing-library/react';
+import MyComponent from './MyComponent';
+
+describe('MyComponent', () => {
+  it('renders correctly', () => {
+    const { getByText } = render(<MyComponent />);
+    expect(getByText('Hello, World!')).toBeInTheDocument();
+  });
+});
+```
+
+## Vitest vs Jest for React 18
+
+Vitest and Jest are both powerful testing frameworks, but they have some key differences. Below is a comparison to help you understand the strengths of each:
+
+
+| Feature                | Vitest                                                     | Jest                                                       |
+| ---------------------- | --------------------------------------------------------- | --------------------------------------------------------- |
+| **Speed**              | 🚀 Extremely fast due to Vite integration                 | 🏃 Fast, but not as fast as Vitest                         |
+| **Configuration**      | 🔧 Zero configuration needed                              | 🔧 Minimal configuration needed                           |
+| **HMR Support**        | ✅ Yes                                                    | ❌ No                                                     |
+| **TypeScript Support** | 🔝 First-class support                                    | 👍 Good support                                           |
+| **Jest Compatibility** | 🤝 Highly compatible                                       | 🌟 N/A                                                    |
+| **Snapshot Testing**  | 📸 Yes                                                    | 📸 Yes                                                    |
+| **React 18 Support**  | ✅ Full support                                           | ✅ Full support                                            |
+| **Ecosystem**          | 🌐 Growing, Vite-focused                                  | 🌍 Established, widely used                               |
+| **Mocking**            | 🎭 Built-in mocking capabilities                           | 🎭 Extensive mocking capabilities                          |
+| **Community**          | 👥 Active and growing                                     | 👥 Large and established                                  |
+
+
+---
+
+For more detailed information, check out the [official Vitest documentation](https://vitest.dev/).
+
