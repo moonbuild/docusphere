@@ -171,5 +171,4 @@ test('should delete a note', async ({ page }) => {
 ```
  
 ## Wrapping Up 🎉
-Playwright is a powerful ally for modern web app testing. With its robust features, cross-browser support, and user-friendly API, it’s perfect for creating reliable, maintainable test suites.
- 
+Playwright is a powerful ally for modern web app testing. With its robust features, cross-browser support, and user-friendly API, it’s perfect for creating reliable, maintainable test suites. 

@@ -117,20 +117,8 @@ export default defineConfig({
 - Automatic type checking during tests.
 - No need for additional type definition packages.
 
-### 3. Performance Benchmarks
 
-| Task              | Vitest | Jest  |
-|-------------------|--------|-------|
-| 100 Unit Tests    | 1.2s   | 4.8s  |
-| Test Watch Mode   | 200ms  | 800ms |
-
-### 4. Modern Feature Support
-
-- Concurrent test execution.
-- Native ESM modules.
-- Built-in coverage reports.
-
-### 5. Trend (Support)
+### Trend (Support)
 
 <PackageTrendDashboard />
 
@@ -139,7 +127,11 @@ export default defineConfig({
 | Scenario                  | Recommended Tool | Example Use Case          |
 |---------------------------|------------------|---------------------------|
 | Unit/Integration Tests    | Vitest           | Form validation logic     |
+<<<<<<< HEAD
 | Full User Journeys        | Playwright /  Cypress          | Checkout flow             |
+=======
+| Full User Journeys        | Cypress / Playwright         | Checkout flow             |
+>>>>>>> 08f765dbeeaf4ad7c114b61ea3b3a2816d9406f4
 | Legacy Projects           | Jest             | AngularJS applications    |
 
 ## Types of Testing
@@ -160,13 +152,13 @@ export default defineConfig({
 ### Integration Testing
 
 - **Definition**: Testing the interaction between multiple units or components.
-- **Tools**: Vitest, Jest, Cypress.
+- **Tools**: Vitest, Jest, Cypress, Playwright.
 - **Diagram**:
   ```mermaid
   graph TD;
     A[Integration Testing] --> B[Vitest];
     A --> C[Jest];
-    A --> D[Cypress/ Playwright];
+    A --> D[Cypress / Playwright ];
     B --> E[Component Interaction];
     C --> F[API Integration];
     D --> G[User Workflows];
@@ -175,7 +167,7 @@ export default defineConfig({
 ### End-to-End Testing
 
 - **Definition**: Testing the entire application flow from the user's perspective.
-- **Tools**: Cypress.
+- **Tools**: Cypress and Playwright.
 - **Diagram**:
   ```mermaid
   graph TD;
