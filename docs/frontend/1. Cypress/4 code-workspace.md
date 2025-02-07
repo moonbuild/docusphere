@@ -237,6 +237,61 @@ describe('Landing Page Renders', () => {
 4. **Assertions**:
    - Ensures the "Get Started" button is visible before interacting.
    - Validates the URL to confirm the correct redirection.
+
+---
+
+### Stubbing the Notes API on `/list`
+
+This test validates the handling of the `/list` page when the notes API is stubbed.
+```javascript title="networkStub.cy.js"
+describe('Stub Notes API on /list', () => {
+  it('should stub the notes/all API ', () => {
+    cy.intercept('GET', 'http://192.168.0.147:8000/note/all', {
+      statusCode: 200,
+      body: [
+        {
+          note_id: 1,
+          title: 'Sample Note',
+          body: 'This is a test note',
+          modified_at: '2025-02-07T06:30:16.803Z',
+          created_at: '2025-02-07T06:30:16.803Z',
+          user_id: 123,
+          additionalProp1: {}
+        },
+        {
+          note_id: 2,
+          title: 'Another Note',
+          body: 'This is another test note',
+          modified_at: '2025-02-07T07:00:00.000Z',
+          created_at: '2025-02-07T07:00:00.000Z',
+          user_id: 124,
+          additionalProp1: {}
+        }
+      ]
+    }).as('getNotes');
+
+    cy.login('mourya', 'password');
+
+    cy.visit('/list');
+
+    cy.wait('@getNotes', { timeout: 30000 }).then((interception) => {
+      expect(interception.response.statusCode).to.eq(200);
+    });
+
+    cy.contains('Sample Note', { timeout: 30000 }).should('be.visible');
+    cy.contains('Another Note', { timeout: 30000 }).should('be.visible');
+  });
+});
+```
+1. **Test Suite**: Verify the `/list` page with a stubbed `notes/all` API response.  
+2. **Test Details**:  
+   - Stub the `GET` request to `notes/all` using `cy.intercept` with mock data.  
+   - Log in via `cy.login` and navigate to `/list`.  
+   - Wait for the stubbed API call (`@getNotes`) to complete.  
+3. **Assertions**:  
+   - Validate the stubbed API response has `statusCode: 200`.  
+   - Ensure the notes, "Sample Note" and "Another Note," are visible on the page.
+
 ---
 
 ### Creating a Note
