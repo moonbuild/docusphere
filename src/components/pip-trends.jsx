@@ -251,7 +251,7 @@ const PackageTrendDashboard = () => {
   return (
     <div className="p-4 space-y-6">
       <div className="bg-white shadow-lg rounded-lg p-6">
-        <h2 className="text-2xl font-semibold mb-4 text-gray-800">Download Trend (Last 30 Days - Monthly)</h2>
+        <h2 className="text-2xl font-semibold mb-4 text-gray-800">Download Trend</h2>
         <ResponsiveContainer width="100%" height={500}>
           <LineChart data={transformedData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
