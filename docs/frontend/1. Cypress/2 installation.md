@@ -34,7 +34,7 @@ This will open the **Cypress Launchpad**.
 
 ---
 
-## Step 3: Configure Cypress  
+## Step 3: (Optional) Configure Cypress  
 
 In the Launchpad:  
 

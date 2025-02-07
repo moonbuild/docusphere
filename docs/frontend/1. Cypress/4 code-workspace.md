@@ -13,7 +13,7 @@ sidebar_position: 4
 - The syntax for TypeScript and JavaScript is the same.
 - All test files should be located in the `cypress/e2e/` folder.
 
-🌟 **GitHub Repository**: You can find the testing files in the [GitHub repository](https://github.com/moonbuild/cypressNotty) repository.
+🌟 **GitHub Repository**: You can find the testing files in the [GitHub repository](https://github.com/moonbuild/cypressNotty).
 
 [![GitHub](https://img.shields.io/badge/View%20on-GitHub-blue?logo=github)](https://github.com/moonbuild/cypressNotty) 
 
@@ -76,8 +76,8 @@ cy.session('mourya', () => {
 
 ### Creating a Custom Command
 Since login is a repetitive task, we can create a custom Cypress command:
-First rename all `.js` files in `cypress/support` folder to `.ts`  
-1. **Navigate to:** `cypress/support/commands.ts`.
+First rename `cypress/support/commands.ts` file to `commands.js`  
+1. **Navigate to:** `cypress/support/commands.js`.
 2. **Add the following code:**
 
 ```javascript title="commands.js"
@@ -125,12 +125,12 @@ Here's an example to test user registration and subsequent login:
 ```javascript title="signup.cy.js"
 describe('New User Registration', () => {
   it('should register a new user and log in', () => {
-    const username = 'naruto';
-    const password = 'uzumakiNaruto';
+    const username = 'mourya';
+    const password = 'password123';
 
     // register
     cy.visit('/register');
-    cy.get("input[name='full_name']").type('naruto22');
+    cy.get("input[name='full_name']").type('Mourya');
     cy.get("input[name='username']").type(username);
     cy.get("input[name='password']").type(password);
     cy.contains('button', 'Create account').click();
@@ -154,7 +154,7 @@ describe('New User Registration', () => {
 2. **Test: 'should register a new user and log in'**:  
    - **Registration**:  
      - Visits `/register`.  
-     - Enters a full name, username (`naruto`), and password (`uzumakiNaruto`).  
+     - Enters a full name, username (`mourya`), and password (`password123`).  
      - Clicks the "Create account" button.  
      - Verifies the "Registration successful!" message and checks redirection to `/login`.  
    - **Login**:  
@@ -170,7 +170,6 @@ describe('New User Registration', () => {
 
 ## Viewing Notes
 Here's how you can test viewing a note:
-
 
 ```javascript title="viewNote.cy.js"
 describe('View Note', () => {
@@ -210,7 +209,7 @@ Here's how to test a landing page that dynamically redirects based on session st
 ```javascript title="landingPage.cy.js"
 describe('Landing Page Renders', () => {
   it('redirects to /list if session exists', () => {
-    cy.login('mourya', 'mourya');
+    cy.login('mourya', 'password123');
     cy.visit('/');
     cy.contains('button', 'Get Started')
       .should('exist')
@@ -270,7 +269,7 @@ describe('Stub Notes API on /list', () => {
       ]
     }).as('getNotes');
 
-    cy.login('mourya', 'password');
+    cy.login('mourya', 'password123');
 
     cy.visit('/list');
 
@@ -301,7 +300,7 @@ Alright, let's get more complex and create a note!
 ```javascript title="createNote.cy.js"
 describe("Create Note", () => {
     it("should create note when title and body is given", () => {
-        cy.login('mourya', 'mourya');
+        cy.login('mourya', 'password123');
         cy.visit('/list');
 
         let initialCount;
@@ -357,7 +356,7 @@ Although we could just assert from the notification message, it's better to actu
 ```javascript title="createNoteSimplify.cy.js"
 describe('Create Note', () => {
     it('should create a new note', () => {
-        cy.login('mourya', 'mourya');
+        cy.login('mourya', 'password123');
         cy.visit('/list');
 
         cy.get('div.rounded-xl.border.bg-card.text-card-foreground.shadow-md', {timeout: 40000})
