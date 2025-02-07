@@ -32,7 +32,8 @@ describe('Example Domain Test', () => {
 });
 ```
 ---
-Got it! Here is the table formatted without using `<br>` tags, making it compatible with Docusaurus:
+
+# Commonly used Cypress Functions
 
 | **Function** | **Description**                                                                 | **Usage Example**                                     | **Parameters**                                                                 |
 |--------------|---------------------------------------------------------------------------------|-------------------------------------------------------|------------------------------------------------------------------------------|
