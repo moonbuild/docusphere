@@ -164,7 +164,7 @@ This document focuses exclusively on three testing tools:
 :::
 ---
 
-## ** Download Trends**
+## **Download Trends**
 <PackageTrendDashboard/>
 
 ---

@@ -127,11 +127,7 @@ export default defineConfig({
 | Scenario                  | Recommended Tool | Example Use Case          |
 |---------------------------|------------------|---------------------------|
 | Unit/Integration Tests    | Vitest           | Form validation logic     |
-<<<<<<< HEAD
-| Full User Journeys        | Playwright /  Cypress          | Checkout flow             |
-=======
 | Full User Journeys        | Cypress / Playwright         | Checkout flow             |
->>>>>>> 08f765dbeeaf4ad7c114b61ea3b3a2816d9406f4
 | Legacy Projects           | Jest             | AngularJS applications    |
 
 ## Types of Testing
