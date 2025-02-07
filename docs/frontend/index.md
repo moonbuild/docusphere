@@ -68,7 +68,7 @@ test('successful login', async ({ page }) => {
   await page.click('button[type="submit"]');
   await expect(page).toHaveURL('https://example.com/dashboard');
 });
-
+```
 
 ### 2. Execution Environment
 
@@ -139,8 +139,7 @@ export default defineConfig({
 | Scenario                  | Recommended Tool | Example Use Case          |
 |---------------------------|------------------|---------------------------|
 | Unit/Integration Tests    | Vitest           | Form validation logic     |
-| Component Interaction     | Cypress          | Dashboard widget behavior |
-| Full User Journeys        | Cypress          | Checkout flow             |
+| Full User Journeys        | Playwright /  Cypress          | Checkout flow             |
 | Legacy Projects           | Jest             | AngularJS applications    |
 
 ## Types of Testing
@@ -167,7 +166,7 @@ export default defineConfig({
   graph TD;
     A[Integration Testing] --> B[Vitest];
     A --> C[Jest];
-    A --> D[Cypress];
+    A --> D[Cypress/ Playwright];
     B --> E[Component Interaction];
     C --> F[API Integration];
     D --> G[User Workflows];
@@ -180,14 +179,14 @@ export default defineConfig({
 - **Diagram**:
   ```mermaid
   graph TD;
-    A[End-to-End Testing] --> B[Cypress];
+    A[End-to-End Testing] --> B[Cypress / Playwright];
     B --> C[Real Browser Testing];
     B --> D[User Journeys];
   ```
 
 ## Conclusion
 
-For React + Vite + TypeScript projects, Vitest provides the best developer experience with minimal configuration, blazing-fast speeds, and seamless integration with modern tooling. Cypress remains essential for critical user journey validation but should complement rather than replace Vitest in the testing strategy.
+For React + Vite + TypeScript projects, Vitest provides the best developer experience with minimal configuration, blazing-fast speeds, and seamless integration with modern tooling. Cypress and Playwright remains essential for critical user journey validation but should complement rather than replace Vitest in the testing strategy.
 
 
 
