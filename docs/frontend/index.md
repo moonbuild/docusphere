@@ -40,16 +40,17 @@ Vitest, Jest, Playwright and Cypress are popular testing tools in the JavaScript
 
 #### Cypress (End-to-End/Component Testing)
 
-- **Focus**: Cypress is designed for end-to-end (E2E) testing, simulating user workflows in real browsers. It can also be used for component testing but is more suited for integration testing.
+- **Focus**: Cypress is designed for end-to-end (E2E) testing, simulating user workflows in real browsers. It can also be used for component testing but is more suited for E2E testing.
 - **Example of Component Testing**:
-  ```javascript title="Login.cy.js"
-  import Login from './Login';
-  describe('Login Component', () => {
-    it('submits form', () => {
-      cy.mount(<Login />);
-      cy.get('input[name="email"]').type('test@example.com');
-      cy.get('form').submit();
-      cy.contains('Success').should('be.visible');
+  ```javascript title="login.cy.js"
+  describe('Login test', () => {
+    it('should successfully log in', () => {
+      cy.visit('/login');
+      cy.get("input[name='username']").type('dino');
+      cy.get("input[name='password']").type('password123');
+      cy.get("button[type='submit']").click();
+      cy.contains('Login successful', {timeout:20000}).should('be.visible');
+      cy.url().should('include', '/list');
     });
   });
   ```
@@ -87,11 +88,11 @@ test('successful login', async ({ page }) => {
 
 2. **Browser-Specific Issues**: Real browser execution can expose rendering inconsistencies that are not present in simulated environments.
 
-3. **Test Scope**: Cypress is better suited for integration testing than isolated component unit tests.
+3. **Test Scope**: Cypress is better suited for E2E testing than isolated component unit tests.
 
 ### Vitest/Jest Advantages for Components
 
-- **Direct TypeScript Support**: Vitest and Jest offer seamless TypeScript integration without additional configuration.
+- **Direct TypeScript Support**: Vitest offer seamless TypeScript integration without additional configuration.
 - **Faster Iteration**: Tests update instantly with code changes via HMR in Vitest.
 - **Native JSX Handling**: Both tools handle JSX natively, making it easier to test React components.
 
@@ -174,8 +175,14 @@ export default defineConfig({
 
 ## Conclusion
 
-For React + Vite + TypeScript projects, Vitest provides the best developer experience with minimal configuration, blazing-fast speeds, and seamless integration with modern tooling. Cypress and Playwright remains essential for critical user journey validation but should complement rather than replace Vitest in the testing strategy.
+- For React + Vite + TypeScript projects, Vitest provides the best developer experience with minimal configuration, blazing-fast speeds, and seamless integration with modern tooling. 
 
+- [Cypress](1.%20Cypress/1%20general-overview.md) and [Playwright](5.%20Playwright/getting-started.md) remains essential for critical user journey validation but should complement rather than replace [Vitest](2.%20Vitest/general-overview.mdx) and [Jest](4.%20Jester/general-overview.md) in the testing strategy.
 
-
+:::info **Quick Links**
+- [**Cypress**](1.%20Cypress/1%20general-overview.md)
+- [**Playwright**](5.%20Playwright/getting-started.md) 
+- [**Vitest**](2.%20Vitest/general-overview.mdx)
+- [**Jest**](4.%20Jester/general-overview.md)
+:::
 

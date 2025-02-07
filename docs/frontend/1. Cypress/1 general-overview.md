@@ -26,8 +26,11 @@ If your app has user interface (UI), Cypress is your go-to tool for:
 - **Simulating Real Users**: Recreate what users actually do in your app—log in, browse, add to cart, check out, you name it.  
 - **E2E Testing**: Validate that your app flows smoothly, from login screens to checkout pages, without skipping a beat.  
 - **Automating Repetitive Tasks**: Let Cypress handle those repeatable actions—form submissions, clicking through flows, or running the same tests over and over, so you don't have to.  
+- **Time Travel**: With Cypress, you can travel back in time to see exactly what happened at each step of your test, making debugging a breeze.
+- **Interactive Test Runner**: Cypress provides a real-time, interactive test runner that allows you to see commands as they execute, giving you immediate feedback and control.
+- **Mocking API Responses**: Stub out backend calls with mock data to test how your frontend behaves—fast, reliable, and without waiting on the server.
 :::info[Heads Up🚧]
- Cypress shines for E2E, but when it comes to React + Vite + TypeScript component testing, Jest and React Testing Library still take the crown. 
+ Cypress shines for E2E, but when it comes to React + Vite + TypeScript component testing, [Vitest](../2.%20Vitest/getting-started.mdx) and [Jest](../4.%20Jester/general-overview.md) still take the crown. 
 :::
 ---
 ## Pros and Cons
@@ -46,7 +49,7 @@ If your app has user interface (UI), Cypress is your go-to tool for:
 ### Cons:
 
 - **Component Testing**: While Cypress can be used for component testing, it is not its primary strength. For component testing, tools like Jest with React Testing Library are more suitable.
-- **Setup Challenges**: There can be issues setting up Cypress for TypeScript files in a React + Vite project.
+- **Setup Challenges for Typescript**: There can be issues setting up Cypress for TypeScript files in a React + Vite project.
 - **Browser Support**: Cypress primarily supports Chrome-based browsers. Other browsers like Safari and Internet Explorer are not supported.
 ---
 
