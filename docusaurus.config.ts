@@ -63,7 +63,7 @@ const config: Config = {
     navbar: {
       title: 'Docusphere',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'Docusphere',
         src: 'svg/planet.svg',
       },
       items: [

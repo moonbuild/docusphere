@@ -125,28 +125,35 @@ it("shows error message for invalid login", async () => {
 
 ```tsx
 it("logs in successfully and redirects to notes list", async () => {
-  vi.spyOn(authService, "login").mockResolvedValue({
-    access_token: "mock-token",
-    user_id: 1,
-    full_name: "mock-name",
-    refresh_token: "mock-refresh",
-  });
+    const mockLogin = vi.spyOn(authService, "login").mockResolvedValue({
+        access_token: "mock-token",
+        user_id: 1,
+        full_name: "mock-name",
+        refresh_token: "mock-refresh"
+    });
 
-  renderRoute("/login");
+    const mockNavigate = vi.fn();
+    vi.mocked(useNavigate).mockReturnValue(mockNavigate);
 
-  await screen.findByRole("heading", { name: /sign in to your account/i });
+    renderRoute("/login");
 
-  const usernameInput = await screen.findByPlaceholderText(/Username/i);
-  const passwordInput = await screen.findByPlaceholderText(/Password/i);
-  const signInButton = screen.getByRole("button", { name: /sign in/i });
+    await screen.findByRole("heading", { name: /sign in to your account/i });
 
-  await userEvent.type(usernameInput, "testuser");
-  await userEvent.type(passwordInput, "password123");
-  await userEvent.click(signInButton);
+    const usernameInput = await screen.findByPlaceholderText(/Username/i);
+    const passwordInput = await screen.findByPlaceholderText(/Password/i);
+    const signInButton = screen.getByRole("button", { name: /sign in/i });
 
-  await waitFor(() => {
-    expect(window.location.pathname).toBe("/");
-  });
+    await userEvent.type(usernameInput, "testuser");
+    await userEvent.type(passwordInput, "password123");
+    await userEvent.click(signInButton);
+
+    // Check if the login function is called
+    expect(mockLogin).toHaveBeenCalledWith({username: "testuser", password: "password123"});
+
+    screen.debug();
+    await waitFor(() => {
+        expect(mockNavigate).toHaveBeenCalledWith({ to : "/list" });;
+    });
 });
 ```
 
