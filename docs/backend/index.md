@@ -5,6 +5,10 @@ displayed_sidebar : backend
 sidebar_position: 1
 slug: /backend
 ---
+import PackageTrendDashboard from "../../src/components/pip-trends"
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 ## **Overview of Python-based Testing Tools**
 
@@ -159,6 +163,12 @@ This document focuses exclusively on three testing tools:
 - [**HTTPX**](backend/httpx) 
 :::
 ---
+
+## **Download Trends**
+<PackageTrendDashboard/>
+
+---
+
 ## **Conclusion**
 
 Each tool has its strengths and weaknesses, and the choice depends on the project requirements and team expertise:
@@ -170,3 +180,5 @@ Each tool has its strengths and weaknesses, and the choice depends on the projec
 - **Lettuce**: Lightweight BDD framework but lacks updates and features.
 - **Doctest**: Great for documentation testing but limited to simple tests.
 - **Nose2**: Extends `unittest` but lacks active maintenance and advanced features.
+Here's a simple markdown table format that you can use to display the number of downloads for different packages:
+
