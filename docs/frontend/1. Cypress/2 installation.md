@@ -34,7 +34,7 @@ This will open the **Cypress Launchpad**.
 
 ---
 
-## Step 3: (Optional) Configure Cypress  
+## Step 3: Configure Cypress  
 
 In the Launchpad:  
 
@@ -79,7 +79,7 @@ Verify if `spec.cy.js` file is created in the path `cypress/e2e/'
 
 ---
 
-## Step 5: Configure Workspace  
+## Step 5: (Optional) Configure Workspace  
 
 Update your `tsconfig.json` file to be properly configured as follows:  
 
